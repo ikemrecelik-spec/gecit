@@ -621,7 +621,7 @@ connectWS();
 :root{--ink:#0E1A24;--panel:#14242F;--panel-2:#1B313E;--line:#23414F;--amber:#F2B53B;--mint:#34D9A0;--danger:#FF6B6B;--blue:#6FB1FF;--text:#EAF2F5;--muted:#8FA6B0}
 *{box-sizing:border-box}html,body{margin:0;padding:0}
 body{background:radial-gradient(1200px 700px at 80% -10%,#16303d,var(--ink) 55%);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:0}
-.page{padding:22px 24px 40px}
+.page{padding:16px 20px 30px}
 h1{font-family:'Space Grotesk';font-size:20px;font-weight:700;margin:0 0 4px}
 .sub{color:var(--muted);font-size:13px;margin-bottom:18px}
 .toprow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
@@ -741,10 +741,11 @@ input.fin:focus,select.fin:focus{border-color:var(--amber)}
 <div class="toast" id="toast"></div>
 
 <script>
-var GL=window.parent&&window.parent.GECIT?window.parent.GECIT:{_token:null,_tenant:'arnor',_api:''};
+var GL=(function(){try{return window.parent&&window.parent.GECIT?window.parent.GECIT:{_token:null,_tenant:'arnor',_api:''};}catch(e){return {_token:null,_tenant:'arnor',_api:''};}}());
 var API=(GL._api||location.origin).replace(/\/$/,'');
 var TENANT=GL._tenant||'arnor';
-var token=GL._token||(window.parent&&window.parent.GECIT&&window.parent.GECIT._token)||null;
+function getToken(){try{return (window.parent&&window.parent.GECIT&&window.parent.GECIT._token)||null;}catch(e){return null;}}
+var token=getToken();
 
 var DEPS=['Önbüro','Yiyecek & İçecek','Mutfak','Kat Hizmetleri','Teknik','Güvenlik','İnsan Kaynakları','Muhasebe','Satış & Pazarlama','Havuz & Plaj','Spa & Wellness','Animasyon','Bahçe','Servis','Depo & Lojistik','Genel'];
 var GOREVLER=['Müdür','Müdür Yardımcısı','Şef','Usta','Personel','Stajyer','Teknisyen','Güvenlik Görevlisi','Resepsiyon','Kasiyer','Garson','Aşçı','Temizlik Görevlisi','Animatör','Bahçıvan','Şoför'];
@@ -753,7 +754,7 @@ var employees=[], filtered=[], curEmp=null, isNew=false, statusFilter='all';
 var docs={}; // tc -> [{name, date}]
 
 async function req(path,opts){opts=opts||{};var h={'Content-Type':'application/json'};
-  if(token)h['Authorization']='Bearer '+token;
+  var tok=getToken()||token; if(tok)h['Authorization']='Bearer '+tok;
   var r=await fetch(API+'/api/'+TENANT+path,{method:opts.method||'GET',headers:h,body:opts.body?JSON.stringify(opts.body):undefined});
   var d=null;try{d=await r.json();}catch(e){}if(!r.ok)throw new Error((d&&d.error)||'Hata '+r.status);return d;}
 
@@ -877,7 +878,7 @@ load();
 <style>
 :root{--ink:#0E1A24;--panel:#14242F;--panel-2:#1B313E;--line:#23414F;--amber:#F2B53B;--mint:#34D9A0;--danger:#FF6B6B;--blue:#6FB1FF;--text:#EAF2F5;--muted:#8FA6B0}
 *{box-sizing:border-box}html,body{margin:0;padding:0}
-body{background:radial-gradient(1200px 700px at 80% -10%,#16303d,var(--ink) 55%);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:22px 24px 40px}
+body{background:radial-gradient(1200px 700px at 80% -10%,#16303d,var(--ink) 55%);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:16px 20px 30px}
 h1{font-family:'Space Grotesk';font-size:20px;font-weight:700;margin:0 0 4px}
 .sub{color:var(--muted);font-size:13px;margin-bottom:20px}
 .role-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:28px}
@@ -955,10 +956,11 @@ select.inline{background:var(--panel-2);border:1px solid var(--line);border-radi
 <div class="toast" id="toast"></div>
 
 <script>
-var GL=window.parent&&window.parent.GECIT?window.parent.GECIT:{_token:null,_tenant:'arnor',_api:''};
+var GL=(function(){try{return window.parent&&window.parent.GECIT?window.parent.GECIT:{_token:null,_tenant:'arnor',_api:''};}catch(e){return {_token:null,_tenant:'arnor',_api:''};}}());
 var API=(GL._api||location.origin).replace(/\/$/,'');
 var TENANT=GL._tenant||'arnor';
-var token=GL._token||(window.parent&&window.parent.GECIT&&window.parent.GECIT._token)||null;
+function getToken(){try{return (window.parent&&window.parent.GECIT&&window.parent.GECIT._token)||null;}catch(e){return null;}}
+var token=getToken();
 
 function toast(t){var el=document.getElementById('toast');el.textContent=t;el.classList.add('on');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('on');},2400);}
 async function req(path,opts){opts=opts||{};var h={'Content-Type':'application/json'};if(token)h['Authorization']='Bearer '+token;
@@ -1004,7 +1006,7 @@ load();
 <style>
 :root{--ink:#0E1A24;--panel:#14242F;--panel-2:#1B313E;--line:#23414F;--amber:#F2B53B;--mint:#34D9A0;--danger:#FF6B6B;--blue:#6FB1FF;--text:#EAF2F5;--muted:#8FA6B0}
 *{box-sizing:border-box}html,body{margin:0;padding:0}
-body{background:radial-gradient(1200px 700px at 80% -10%,#16303d,var(--ink) 55%);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:22px 24px 40px}
+body{background:radial-gradient(1200px 700px at 80% -10%,#16303d,var(--ink) 55%);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:16px 20px 30px}
 h1{font-family:'Space Grotesk';font-size:20px;font-weight:700;margin:0 0 4px}
 .sub{color:var(--muted);font-size:13px;margin-bottom:20px}
 .rep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:24px}
@@ -1077,15 +1079,16 @@ tr:last-child td{border-bottom:0}
 <div class="toast" id="toast"></div>
 
 <script>
-var GL=window.parent&&window.parent.GECIT?window.parent.GECIT:{_token:null,_tenant:'arnor',_api:''};
+var GL=(function(){try{return window.parent&&window.parent.GECIT?window.parent.GECIT:{_token:null,_tenant:'arnor',_api:''};}catch(e){return {_token:null,_tenant:'arnor',_api:''};}}());
 var API=(GL._api||location.origin).replace(/\/$/,'');
 var TENANT=GL._tenant||'arnor';
-var token=GL._token||(window.parent&&window.parent.GECIT&&window.parent.GECIT._token)||null;
+function getToken(){try{return (window.parent&&window.parent.GECIT&&window.parent.GECIT._token)||null;}catch(e){return null;}}
+var token=getToken();
 var curRep='attendance', attData=[], leaveData=[], empData=[];
 
 function toast(t){var el=document.getElementById('toast');el.textContent=t;el.classList.add('on');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('on');},2400);}
 async function req(path,opts){opts=opts||{};var h={'Content-Type':'application/json'};
-  if(token)h['Authorization']='Bearer '+token;
+  var tok=getToken()||token; if(tok)h['Authorization']='Bearer '+tok;
   var r=await fetch(API+'/api/'+TENANT+path,{method:opts.method||'GET',headers:h,body:opts.body?JSON.stringify(opts.body):undefined});
   var d=null;try{d=await r.json();}catch(e){}if(!r.ok)throw new Error((d&&d.error)||'Hata');return d;}
 
@@ -1616,7 +1619,7 @@ loadData().then(runReport);
 <style>
 :root{--ink:#0E1A24;--panel:#14242F;--panel-2:#1B313E;--line:#23414F;--amber:#F2B53B;--mint:#34D9A0;--danger:#FF6B6B;--blue:#6FB1FF;--text:#EAF2F5;--muted:#8FA6B0}
 *{box-sizing:border-box}html,body{margin:0;padding:0}
-body{background:radial-gradient(1200px 700px at 80% -10%,#16303d,var(--ink) 55%);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:22px 24px 40px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+body{background:radial-gradient(1200px 700px at 80% -10%,#16303d,var(--ink) 55%);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:16px 20px 30px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
 @media(max-width:700px){body{grid-template-columns:1fr}}
 .qr-side{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px;text-align:center}
 h2{font-family:'Space Grotesk';font-size:17px;font-weight:700;margin:0 0 4px}
@@ -1656,10 +1659,11 @@ h2{font-family:'Space Grotesk';font-size:17px;font-weight:700;margin:0 0 4px}
 </div>
 
 <script>
-var GL=window.parent&&window.parent.GECIT?window.parent.GECIT:{_token:null,_tenant:'arnor',_api:''};
+var GL=(function(){try{return window.parent&&window.parent.GECIT?window.parent.GECIT:{_token:null,_tenant:'arnor',_api:''};}catch(e){return {_token:null,_tenant:'arnor',_api:''};}}());
 var API=(GL._api||location.origin).replace(/\/$/,'');
 var TENANT=GL._tenant||'arnor';
-var token=GL._token||(window.parent&&window.parent.GECIT&&window.parent.GECIT._token)||null;
+function getToken(){try{return (window.parent&&window.parent.GECIT&&window.parent.GECIT._token)||null;}catch(e){return null;}}
+var token=getToken();
 var COLORS=['#34D9A0','#6FB1FF','#C792EA','#FF9E6B','#F2B53B'];
 var qrObj=null,cdVal=8,lastAttLen=0;
 var FEED_MAX=8; // max 8 giriş göster
@@ -1761,7 +1765,40 @@ setInterval(renderFeed,10000);
   function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show');},2600);}
 
   // LOGIN
-  function doLogin(){ $('#login').style.display='none'; $('#app').style.display='block'; activate(document.querySelector('.navitem.active')); window.GECIT.load().then(function(){ window.GECIT.refresh&&window.GECIT.refresh(); }); }
+  // LOGIN — backend'e bağlı otel kullanıcısı girişi
+  function doLogin(){
+    var user=$('#lg-id').value.trim(), pass=$('#lg-pw').value;
+    var hint=$('.loginhint');
+    if(hint)hint.textContent='Giriş yapılıyor…';
+    // Operatör token'ı varsa direkt geç (süper-admin otel seçti)
+    if(window.GECIT._token){
+      $('#login').style.display='none'; $('#app').style.display='block';
+      activate(document.querySelector('.navitem.active'));
+      window.GECIT.load().then(function(){ window.GECIT.refresh&&window.GECIT.refresh(); });
+      return;
+    }
+    // Otel kullanıcısı girişi
+    fetch((window.GECIT._api||'')+'/api/hotel/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:user,password:pass})})
+      .then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d};});})
+      .then(function(res){
+        if(!res.ok){if(hint)hint.textContent='Hata: '+(res.d.error||'Giriş başarısız');return;}
+        // Token'ı GECIT nesnesine yaz — modüller buradan alır
+        window.GECIT._token=res.d.token;
+        window.GECIT._tenant=res.d.tenant||window.GECIT._tenant||'arnor';
+        window.GECIT.api=function(path,opts){
+          opts=opts||{};var h={'Content-Type':'application/json'};
+          if(window.GECIT._token)h['Authorization']='Bearer '+window.GECIT._token;
+          return fetch((window.GECIT._api||'')+'/api'+path,{method:opts.method||'GET',headers:h,body:opts.body?JSON.stringify(opts.body):undefined})
+            .then(function(r){return r.json().catch(function(){return {};}).then(function(d){if(!r.ok)throw new Error((d&&d.error)||('hata '+r.status));return d;});});
+        };
+        window.GECIT.apiT=function(path,opts){return window.GECIT.api('/'+window.GECIT._tenant+path,opts);};
+        $('#hotel-name').textContent=res.d.name||user;
+        $('#login').style.display='none'; $('#app').style.display='block';
+        activate(document.querySelector('.navitem.active'));
+        window.GECIT.load().then(function(){ window.GECIT.refresh&&window.GECIT.refresh(); });
+      })
+      .catch(function(err){if(hint)hint.textContent='Bağlantı hatası: '+err.message;});
+  }
   $('#lg-btn').addEventListener('click',doLogin);
 
   // SÜPER-ADMIN · işletme (otel) seçimi
@@ -1879,7 +1916,7 @@ setInterval(renderFeed,10000);
 <style>
 :root{--ink:#0E1A24;--panel:#14242F;--panel-2:#1B313E;--line:#23414F;--amber:#F2B53B;--mint:#34D9A0;--danger:#FF6B6B;--blue:#6FB1FF;--text:#EAF2F5;--muted:#8FA6B0}
 *{box-sizing:border-box}html,body{margin:0;padding:0}
-body{background:radial-gradient(1200px 700px at 80% -10%,#16303d,var(--ink) 55%);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:22px 24px 60px}
+body{background:radial-gradient(1200px 700px at 80% -10%,#16303d,var(--ink) 55%);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:16px 20px 30px}
 h1{font-family:'Space Grotesk';font-size:20px;font-weight:700;margin:0 0 4px}
 .sub{color:var(--muted);font-size:13px;margin-bottom:24px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
@@ -2350,7 +2387,7 @@ load();
 <style>
 :root{--ink:#0E1A24;--panel:#14242F;--panel-2:#1B313E;--line:#23414F;--amber:#F2B53B;--mint:#34D9A0;--danger:#FF6B6B;--blue:#6FB1FF;--text:#EAF2F5;--muted:#8FA6B0}
 *{box-sizing:border-box}html,body{margin:0;padding:0}
-body{background:radial-gradient(1200px 700px at 80% -10%,#16303d,var(--ink) 55%);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:22px 24px 40px}
+body{background:radial-gradient(1200px 700px at 80% -10%,#16303d,var(--ink) 55%);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:16px 20px 30px}
 h1{font-family:'Space Grotesk';font-size:20px;font-weight:700;margin:0 0 4px}
 .sub{color:var(--muted);font-size:13px;margin-bottom:18px}
 .toprow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
@@ -2418,10 +2455,11 @@ tr:last-child td{border-bottom:0}
 <div class="toast" id="toast"></div>
 
 <script>
-var GL=window.parent&&window.parent.GECIT?window.parent.GECIT:{_token:null,_tenant:'arnor',_api:''};
+var GL=(function(){try{return window.parent&&window.parent.GECIT?window.parent.GECIT:{_token:null,_tenant:'arnor',_api:''};}catch(e){return {_token:null,_tenant:'arnor',_api:''};}}());
 var API=(GL._api||location.origin).replace(/\/$/,'');
 var TENANT=GL._tenant||'arnor';
-var token=GL._token||(window.parent&&window.parent.GECIT&&window.parent.GECIT._token)||null;
+function getToken(){try{return (window.parent&&window.parent.GECIT&&window.parent.GECIT._token)||null;}catch(e){return null;}}
+var token=getToken();
 
 // ay/yıl durumu
 var now=new Date(), curYear=now.getFullYear(), curMonth=now.getMonth()+1;
@@ -2437,7 +2475,7 @@ function nextMonth(){curMonth++;if(curMonth>12){curMonth=1;curYear++;}load();}
 function toast(t){var el=document.getElementById('toast');el.textContent=t;el.classList.add('on');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('on');},2400);}
 
 async function req(path,opts){opts=opts||{};var h={'Content-Type':'application/json'};
-  if(token)h['Authorization']='Bearer '+token;
+  var tok=getToken()||token; if(tok)h['Authorization']='Bearer '+tok;
   var r=await fetch(API+'/api/'+TENANT+path,{method:opts.method||'GET',headers:h,body:opts.body?JSON.stringify(opts.body):undefined});
   var d=null;try{d=await r.json();}catch(e){}if(!r.ok)throw new Error((d&&d.error)||'Hata');return d;}
 
@@ -2508,7 +2546,7 @@ load();
 <style>
 :root{--ink:#0E1A24;--panel:#14242F;--panel-2:#1B313E;--line:#23414F;--amber:#F2B53B;--mint:#34D9A0;--danger:#FF6B6B;--blue:#6FB1FF;--text:#EAF2F5;--muted:#8FA6B0}
 *{box-sizing:border-box}html,body{margin:0;padding:0}
-body{background:radial-gradient(1200px 700px at 80% -10%,#16303d,var(--ink) 55%);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:22px 24px 40px}
+body{background:radial-gradient(1200px 700px at 80% -10%,#16303d,var(--ink) 55%);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:16px 20px 30px}
 h1{font-family:'Space Grotesk';font-size:20px;font-weight:700;margin:0 0 4px}
 .sub{color:var(--muted);font-size:13px;margin-bottom:18px}
 .toprow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
@@ -2568,10 +2606,11 @@ tr:last-child td{border-bottom:0}
 <div class="toast" id="toast"></div>
 
 <script>
-var GL=window.parent&&window.parent.GECIT?window.parent.GECIT:{_token:null,_tenant:'arnor',_api:''};
+var GL=(function(){try{return window.parent&&window.parent.GECIT?window.parent.GECIT:{_token:null,_tenant:'arnor',_api:''};}catch(e){return {_token:null,_tenant:'arnor',_api:''};}}());
 var API=(GL._api||location.origin).replace(/\/$/,'');
 var TENANT=GL._tenant||'arnor';
-var token=GL._token||(window.parent&&window.parent.GECIT&&window.parent.GECIT._token)||null;
+function getToken(){try{return (window.parent&&window.parent.GECIT&&window.parent.GECIT._token)||null;}catch(e){return null;}}
+var token=getToken();
 
 var now=new Date(),curY=now.getFullYear(),curM=now.getMonth()+1,curW=0;
 var DAYS=['Pz','Pt','Sa','Ça','Pe','Cu','Ct'];
