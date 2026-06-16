@@ -1,0 +1,297 @@
+<!doctype html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geçit · Operatör Paneli</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0A1520;--panel:#111E2A;--panel2:#172433;--line:#1E3548;--amber:#F2B53B;--mint:#34D9A0;--danger:#FF6B6B;--blue:#6FB1FF;--purple:#C792EA;--orange:#FF9E6B;--text:#EAF2F5;--muted:#7A9BAA}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--ink);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+/* LOGIN */
+#login{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(900px 700px at 60% -5%,#16303d,var(--ink) 60%);z-index:100}
+.lbox{width:100%;max-width:380px;padding:36px 32px;background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:0 32px 80px rgba(0,0,0,.5)}
+.lbox .logo{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--amber),#d99a1f);display:grid;place-items:center;font-family:'Space Grotesk';font-weight:800;font-size:24px;color:#1a1205;margin:0 auto 18px}
+.lbox h1{font-family:'Space Grotesk';font-size:22px;font-weight:700;text-align:center;margin-bottom:4px}
+.lbox p{color:var(--muted);font-size:13px;text-align:center;margin-bottom:22px}
+.lbox input{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:13px 14px;color:var(--text);font-size:15px;font-family:inherit;outline:none;margin-bottom:10px}
+.lbox input:focus{border-color:var(--amber)}
+.lbox button{width:100%;background:var(--amber);color:#1a1205;border:0;border-radius:11px;padding:14px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;margin-top:4px}
+.lerr{color:var(--danger);font-size:12.5px;min-height:16px;margin:2px 0 6px;text-align:center}
+/* SHELL */
+#app{display:none;min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:230px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:10}
+.sb-brand{display:flex;align-items:center;gap:10px;padding:20px 18px 16px;border-bottom:1px solid var(--line)}
+.sb-logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--amber),#d99a1f);display:grid;place-items:center;font-family:'Space Grotesk';font-weight:800;font-size:16px;color:#1a1205}
+.sb-brand span{font-family:'Space Grotesk';font-weight:700;font-size:15px}
+.sb-brand small{font-size:10px;color:var(--muted);display:block}
+.sb-nav{flex:1;padding:12px 10px;overflow:auto}
+.nav-sec{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.8px;padding:14px 8px 6px;text-transform:uppercase}
+.nitem{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;cursor:pointer;font-size:13.5px;font-weight:500;color:var(--muted);transition:all .15s;border:0;background:none;width:100%;text-align:left;font-family:inherit}
+.nitem:hover{background:var(--panel2);color:var(--text)}
+.nitem.on{background:rgba(242,181,59,.12);color:var(--amber)}
+.nitem svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.7;flex-shrink:0}
+.sb-foot{padding:14px 10px;border-top:1px solid var(--line)}
+.who{display:flex;align-items:center;gap:9px;padding:8px;border-radius:10px}
+.who-ava{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--blue),#4a86d6);display:grid;place-items:center;font-weight:700;font-size:12px;color:#06121c}
+.who small{font-size:11px;color:var(--muted);display:block}
+.main{margin-left:230px;min-height:100vh;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 28px 14px;border-bottom:1px solid var(--line);background:var(--panel)}
+.topbar h2{font-family:'Space Grotesk';font-size:20px;font-weight:700}
+.topbar .acts{display:flex;gap:10px;align-items:center}
+.content{padding:24px 28px;flex:1}
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:24px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;position:relative;overflow:hidden}
+.kpi::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,var(--accent,transparent),transparent 70%);opacity:.07}
+.kpi .label{font-size:11.5px;color:var(--muted);font-weight:600;margin-bottom:8px}
+.kpi .val{font-family:'Space Grotesk';font-size:32px;font-weight:700}
+.kpi .sub{font-size:11px;color:var(--muted);margin-top:4px}
+.kpi.amber{--accent:var(--amber)}.kpi.mint{--accent:var(--mint)}.kpi.blue{--accent:var(--blue)}.kpi.danger{--accent:var(--danger)}
+/* TABLE */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:20px}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line)}
+.card-head h3{font-family:'Space Grotesk';font-size:15px;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;padding:11px 16px;font-size:11px;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line);background:var(--panel2)}
+td{padding:12px 16px;border-bottom:1px solid rgba(30,53,72,.6);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tr:hover td{background:rgba(255,255,255,.02)}
+.badge{font-size:11px;padding:3px 9px;border-radius:6px;font-weight:600;display:inline-block}
+.b-ok{background:rgba(52,217,160,.14);color:var(--mint)}.b-warn{background:rgba(242,181,59,.14);color:var(--amber)}.b-off{background:rgba(122,155,170,.12);color:var(--muted)}.b-no{background:rgba(255,107,107,.14);color:var(--danger)}
+/* BUTTONS */
+.btn{padding:9px 16px;border-radius:10px;border:0;font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:7px;transition:opacity .15s}
+.btn:hover{opacity:.85}.btn:active{transform:scale(.97)}
+.btn-amber{background:var(--amber);color:#1a1205}
+.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+.btn-danger{background:transparent;border:1px solid rgba(255,107,107,.4);color:var(--danger)}
+.btn-mint{background:var(--mint);color:#06140e}
+.btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2}
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(5,12,20,.75);z-index:200;display:none;place-items:center}
+.modal-bg.on{display:grid}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:28px;width:100%;max-width:460px;box-shadow:0 32px 80px rgba(0,0,0,.5)}
+.modal h3{font-family:'Space Grotesk';font-size:18px;font-weight:700;margin-bottom:16px}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:500}
+.field input,.field select{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:12px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none}
+.field input:focus,.field select:focus{border-color:var(--amber)}
+.merr{color:var(--danger);font-size:12.5px;min-height:16px;margin:4px 0}
+.mactions{display:flex;gap:10px;margin-top:18px;justify-content:flex-end}
+/* HOTEL ROW KPI */
+.hotel-kpi{display:flex;gap:16px;flex-wrap:wrap}
+.hk{text-align:center}.hk .v{font-family:'Space Grotesk';font-size:18px;font-weight:700}.hk .l{font-size:10px;color:var(--muted)}
+/* INLINE BADGE */
+.dot-live{width:7px;height:7px;border-radius:50%;background:var(--mint);display:inline-block;animation:blink 1.5s ease-in-out infinite;margin-right:5px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(18px);background:#0b1820;border:1px solid var(--line);color:var(--text);padding:11px 18px;border-radius:11px;font-size:13px;opacity:0;transition:.25s;z-index:300;max-width:420px;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.live-bar{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted)}
+</style></head><body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="lbox">
+    <div class="logo">G</div>
+    <h1>Geçit · Operatör</h1>
+    <p>SaaS yönetim paneli · tüm işletmeleri yönet</p>
+    <input id="l-user" placeholder="Operatör ID" value="gecit.admin">
+    <input id="l-pass" type="password" placeholder="Şifre" value="123456">
+    <div class="lerr" id="l-err"></div>
+    <button onclick="doLogin()">Giriş yap</button>
+    <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:12px">Demo: gecit.admin / 123456</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="sidebar">
+    <div class="sb-brand"><div class="sb-logo">G</div><div><span>Geçit</span><small>Operatör Paneli</small></div></div>
+    <nav class="sb-nav">
+      <div class="nav-sec">Genel</div>
+      <button class="nitem on" data-page="dashboard" onclick="page(this)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Genel Bakış</button>
+      <div class="nav-sec">Yönetim</div>
+      <button class="nitem" data-page="tenants" onclick="page(this)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>İşletmeler</button>
+      <button class="nitem" data-page="users" onclick="page(this)"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Otel Kullanıcıları</button>
+      <div class="nav-sec">İzleme</div>
+      <button class="nitem" data-page="live" onclick="page(this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Canlı Akış</button>
+    </nav>
+    <div class="sb-foot"><div class="who"><div class="who-ava" id="who-ava">G</div><div><div style="font-size:13px;font-weight:600" id="who-name">gecit.admin</div><small>Operatör</small></div></div></div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div><h2 id="page-title">Genel Bakış</h2><div class="live-bar"><span class="dot-live"></span><span id="last-refresh">—</span></div></div>
+      <div class="acts">
+        <button class="btn btn-ghost" onclick="loadAll()"><svg viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>Yenile</button>
+        <button class="btn btn-amber" id="top-action" onclick="topAction()"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span id="top-action-txt">İşletme Ekle</span></button>
+      </div>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<!-- MODALs -->
+<div class="modal-bg" id="m-tenant"><div class="modal">
+  <h3 id="mt-title">İşletme Ekle</h3>
+  <div class="field"><label>İşletme ID (küçük harf, tire)</label><input id="mt-id" placeholder="ör: arnor-side"></div>
+  <div class="field"><label>İşletme Adı</label><input id="mt-name" placeholder="ARNOR DELUXE HOTEL"></div>
+  <div class="field"><label>Konum</label><input id="mt-loc" placeholder="Side / Antalya"></div>
+  <div class="field"><label>Personel sayısı</label><input id="mt-staff" type="number" placeholder="241"></div>
+  <div class="field"><label>Plan</label><select id="mt-plan"><option>Pro</option><option>Başlangıç</option><option>Kurumsal</option></select></div>
+  <div class="merr" id="mt-err"></div>
+  <div class="mactions"><button class="btn btn-ghost" onclick="closeModal('m-tenant')">İptal</button><button class="btn btn-amber" onclick="saveTenant()">Kaydet</button></div>
+</div></div>
+
+<div class="modal-bg" id="m-user"><div class="modal">
+  <h3>Otel Kullanıcısı Ekle</h3>
+  <div class="field"><label>İşletme</label><select id="mu-tenant" style="background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:12px 14px;color:var(--text);width:100%;font-family:inherit;outline:none"></select></div>
+  <div class="field"><label>Kullanıcı adı</label><input id="mu-user" placeholder="arnor.ik"></div>
+  <div class="field"><label>Şifre</label><input id="mu-pass" type="password" placeholder="••••••"></div>
+  <div class="field"><label>Ad Soyad</label><input id="mu-name" placeholder="Emre Çelik"></div>
+  <div class="merr" id="mu-err"></div>
+  <div class="mactions"><button class="btn btn-ghost" onclick="closeModal('m-user')">İptal</button><button class="btn btn-mint" onclick="saveUser()">Oluştur</button></div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var API='', token=null, curPage='dashboard', allTenants=[], allUsers=[], summary=[];
+var pageData={dashboard:{title:'Genel Bakış',action:'—'},tenants:{title:'İşletmeler',action:'İşletme Ekle'},users:{title:'Otel Kullanıcıları',action:'Kullanıcı Ekle'},live:{title:'Canlı Akış',action:'—'}};
+
+function u(p){return API+'/api'+p;}
+async function api(path,opts){opts=opts||{};var h=opts.headers||{};h['Content-Type']='application/json';
+  if(token)h['Authorization']='Bearer '+token;
+  var r=await fetch(u(path),{method:opts.method||'GET',headers:h,body:opts.body?JSON.stringify(opts.body):undefined});
+  var d=null;try{d=await r.json();}catch(e){}if(!r.ok)throw new Error((d&&d.error)||('Hata '+r.status));return d;}
+
+function toast(t,ok){var el=document.getElementById('toast');el.textContent=t;el.classList.add('on');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('on');},2500);}
+function closeModal(id){document.getElementById(id).classList.remove('on');}
+function openModal(id){document.getElementById(id).classList.add('on');}
+
+async function doLogin(){var e=document.getElementById('l-err');e.textContent='Giriş yapılıyor…';
+  try{var d=await api('/operator/login',{method:'POST',auth:false,body:{username:document.getElementById('l-user').value,password:document.getElementById('l-pass').value}});
+    token=d.token;document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';
+    document.getElementById('who-name').textContent=document.getElementById('l-user').value;
+    await loadAll();startRefresh();
+  }catch(err){e.textContent=err.message;}}
+
+function page(el){document.querySelectorAll('.nitem').forEach(function(n){n.classList.remove('on');});el.classList.add('on');
+  curPage=el.dataset.page;var pd=pageData[curPage];
+  document.getElementById('page-title').textContent=pd.title;
+  document.getElementById('top-action-txt').textContent=pd.action;
+  document.getElementById('top-action').style.display=(pd.action==='—')?'none':'inline-flex';
+  render();}
+
+function topAction(){if(curPage==='tenants')openAddTenant();else if(curPage==='users')openAddUser();}
+
+async function loadAll(){
+  try{[summary,allTenants,allUsers]=await Promise.all([api('/admin/summary'),api('/tenants'),api('/hotel-users')]);}catch(e){toast('Veri yüklenemedi: '+e.message);}
+  document.getElementById('last-refresh').textContent='Son güncelleme: '+new Date().toLocaleTimeString('tr');
+  render();}
+
+function startRefresh(){setInterval(loadAll,15000);}
+
+function render(){
+  if(curPage==='dashboard')renderDashboard();
+  else if(curPage==='tenants')renderTenants();
+  else if(curPage==='users')renderUsers();
+  else if(curPage==='live')renderLive();}
+
+function renderDashboard(){
+  var total_emp=summary.reduce(function(a,t){return a+t.emps;},0);
+  var total_in=summary.reduce(function(a,t){return a+t.inside;},0);
+  var total_pend=summary.reduce(function(a,t){return a+t.pending;},0);
+  var total_leave=summary.reduce(function(a,t){return a+t.leaves;},0);
+  document.getElementById('content').innerHTML=
+    '<div class="kpi-grid">'+
+    kpi('Toplam Personel',total_emp,'Tüm işletmeler','amber')+
+    kpi('Şu an İçeride',total_in,'Aktif geçişler','mint')+
+    kpi('Onay Bekleyen',total_pend,'Kayıt onayları','danger')+
+    kpi('Bekleyen İzin',total_leave,'İzin talepleri','blue')+
+    '</div>'+
+    '<div class="card"><div class="card-head"><h3>İşletme Durumu</h3><span style="font-size:12px;color:var(--muted)">'+summary.length+' işletme</span></div>'+
+    '<table><thead><tr><th>İşletme</th><th>Konum</th><th>Personel</th><th>İçeride</th><th>Bugün Giriş</th><th>Onay</th><th>Plan</th><th>Durum</th></tr></thead><tbody>'+
+    summary.map(function(t){return '<tr>'+
+      '<td><b>'+t.name+'</b></td>'+
+      '<td style="color:var(--muted)">'+t.loc+'</td>'+
+      '<td><span style="font-family:JetBrains Mono;font-weight:700">'+t.emps+'</span></td>'+
+      '<td><span style="font-family:JetBrains Mono;color:var(--mint);font-weight:700">'+t.inside+'</span></td>'+
+      '<td><span style="font-family:JetBrains Mono">'+t.todayIn+'</span></td>'+
+      '<td>'+(t.pending>0?'<span class="badge b-warn">'+t.pending+' bekliyor</span>':'<span class="badge b-ok">temiz</span>')+'</td>'+
+      '<td><span class="badge b-ok">'+t.plan+'</span></td>'+
+      '<td>'+(t.active?'<span class="badge b-ok">Aktif</span>':'<span class="badge b-off">Pasif</span>')+'</td>'+
+      '</tr>';}).join('')+
+    '</tbody></table></div>';}
+
+function kpi(label,val,sub,cls){return '<div class="kpi '+cls+'"><div class="label">'+label+'</div><div class="val">'+val+'</div><div class="sub">'+sub+'</div></div>';}
+
+function renderTenants(){document.getElementById('content').innerHTML=
+  '<div class="card"><div class="card-head"><h3>Tüm İşletmeler</h3></div>'+
+  '<table><thead><tr><th>ID</th><th>İsim</th><th>Konum</th><th>Personel</th><th>Plan</th><th>Durum</th><th>İşlemler</th></tr></thead><tbody>'+
+  allTenants.map(function(t){return '<tr>'+
+    '<td><span style="font-family:JetBrains Mono;font-size:12px;color:var(--muted)">'+t.id+'</span></td>'+
+    '<td><b>'+t.name+'</b></td>'+
+    '<td style="color:var(--muted)">'+t.loc+'</td>'+
+    '<td>'+t.staff+'</td>'+
+    '<td><span class="badge b-ok">'+t.plan+'</span></td>'+
+    '<td>'+(t.active?'<span class="badge b-ok">Aktif</span>':'<span class="badge b-off">Pasif</span>')+'</td>'+
+    '<td><button class="btn btn-ghost" style="font-size:12px;padding:6px 11px" onclick="editTenant(\''+t.id+'\')">Düzenle</button> '+
+    '<button class="btn btn-danger" style="font-size:12px;padding:6px 11px" onclick="toggleTenant(\''+t.id+'\','+t.active+')">'+(t.active?'Pasife al':'Aktifleştir')+'</button></td>'+
+    '</tr>';}).join('')+
+  '</tbody></table></div>';}
+
+function renderUsers(){
+  document.getElementById('content').innerHTML=
+  '<div class="card"><div class="card-head"><h3>Otel Kullanıcıları</h3><span style="font-size:12px;color:var(--muted)">Bu kullanıcılar otel paneline giriş yapar</span></div>'+
+  '<table><thead><tr><th>Kullanıcı</th><th>Ad Soyad</th><th>İşletme</th><th>İşlemler</th></tr></thead><tbody>'+
+  allUsers.map(function(u){return '<tr>'+
+    '<td><span style="font-family:JetBrains Mono">'+u.username+'</span></td>'+
+    '<td>'+u.name+'</td>'+
+    '<td><span class="badge b-ok">'+u.tenant_id+'</span></td>'+
+    '<td><button class="btn btn-danger" style="font-size:12px;padding:6px 11px" onclick="deleteUser(\''+u.username+'\')">Sil</button></td>'+
+    '</tr>';}).join('')+
+  '</tbody></table></div>';}
+
+function renderLive(){
+  document.getElementById('content').innerHTML=
+  '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px">'+
+  summary.map(function(t){return '<div class="card"><div class="card-head"><h3>'+t.name+'</h3><span class="badge '+(t.active?'b-ok':'b-off')+'">'+(t.active?'Aktif':'Pasif')+'</span></div>'+
+    '<div style="padding:16px 18px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px">'+
+    livestat('İçeride',t.inside,'mint')+livestat('Bugün Giriş',t.todayIn,'blue')+
+    livestat('Onay Bekliyor',t.pending,'amber')+livestat('İzin Bekliyor',t.leaves,'orange')+
+    livestat('Toplam Personel',t.emps,'text')+livestat('Plan',t.plan,'text')+
+    '</div>'+
+    '<div style="padding:0 18px 14px"><a href="'+location.origin+'/gecit-site-v1.html" target="_blank" style="color:var(--amber);font-size:12px">Panele git →</a></div>'+
+    '</div>';}).join('')+'</div>';}
+
+function livestat(l,v,c){return '<div style="background:var(--panel2);border-radius:10px;padding:12px"><div style="font-size:11px;color:var(--muted);margin-bottom:4px">'+l+'</div><div style="font-family:Space Grotesk;font-size:20px;font-weight:700;color:var(--'+c+',var(--text))">'+v+'</div></div>';}
+
+/* İŞLETME CRUD */
+var editingTenant=null;
+function openAddTenant(){editingTenant=null;document.getElementById('mt-title').textContent='İşletme Ekle';document.getElementById('mt-id').value='';document.getElementById('mt-id').disabled=false;['mt-name','mt-loc','mt-staff'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('mt-plan').value='Pro';document.getElementById('mt-err').textContent='';openModal('m-tenant');}
+function editTenant(id){editingTenant=id;var t=allTenants.find(function(x){return x.id===id;});if(!t)return;document.getElementById('mt-title').textContent='İşletme Düzenle';document.getElementById('mt-id').value=t.id;document.getElementById('mt-id').disabled=true;document.getElementById('mt-name').value=t.name;document.getElementById('mt-loc').value=t.loc;document.getElementById('mt-staff').value=t.staff;document.getElementById('mt-plan').value=t.plan;document.getElementById('mt-err').textContent='';openModal('m-tenant');}
+async function saveTenant(){var e=document.getElementById('mt-err');
+  var body={id:document.getElementById('mt-id').value.trim(),name:document.getElementById('mt-name').value.trim(),loc:document.getElementById('mt-loc').value.trim(),staff:+document.getElementById('mt-staff').value||0,plan:document.getElementById('mt-plan').value};
+  try{if(editingTenant){await api('/tenants/'+editingTenant,{method:'PUT',body:body});}else{await api('/tenants',{method:'POST',body:body});}
+    closeModal('m-tenant');toast(editingTenant?'İşletme güncellendi':'İşletme eklendi');await loadAll();}catch(err){e.textContent=err.message;}}
+async function toggleTenant(id,active){if(!confirm((active?'Pasife almak':'Aktifleştirmek')+' istediğinize emin misiniz?'))return;
+  await api('/tenants/'+id,{method:'PUT',body:{active:active?0:1}});toast('Güncellendi');await loadAll();}
+
+/* KULLANICI CRUD */
+function openAddUser(){
+  var sel=document.getElementById('mu-tenant');sel.innerHTML=allTenants.map(function(t){return '<option value="'+t.id+'">'+t.name+'</option>';}).join('');
+  ['mu-user','mu-pass','mu-name'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('mu-err').textContent='';openModal('m-user');}
+async function saveUser(){var e=document.getElementById('mu-err');
+  var body={tenant_id:document.getElementById('mu-tenant').value,username:document.getElementById('mu-user').value.trim(),password:document.getElementById('mu-pass').value,name:document.getElementById('mu-name').value.trim()};
+  if(!body.username||!body.password){e.textContent='Kullanıcı adı ve şifre gerekli';return;}
+  try{await api('/hotel-users',{method:'POST',body:body});closeModal('m-user');toast('Kullanıcı oluşturuldu');await loadAll();}catch(err){e.textContent=err.message;}}
+async function deleteUser(username){if(!confirm(username+' kullanıcısını silmek istediğinize emin misiniz?'))return;
+  await api('/hotel-users/'+username,{method:'DELETE'});toast('Kullanıcı silindi');await loadAll();}
+
+// Enter ile giriş
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('login').style.display!=='none')doLogin();});
+
+// Başlangıç
+window.addEventListener('load',function(){document.getElementById('l-pass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});});
+</script>
+</body></html>
