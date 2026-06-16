@@ -127,6 +127,16 @@ app.post('/api/:tenant/personnel/register', (req, res) => {
   res.json({ ok: true, status: 'pending' });
 });
 
+// TC + DOĞUM TARİHİ ile giriş (mobil için — şifresiz)
+app.post('/api/:tenant/personnel/login-dob', (req, res) => {
+  const { tenant } = req.params; const { tc, dob } = req.body || {};
+  const a = D.getAccount(tenant, tc);
+  if (!a) return res.status(401).json({ error: 'Bu TC ile kayıt bulunamadı. İK ile iletişime geçin.' });
+  if (a.dob !== dob) return res.status(401).json({ error: 'Doğum tarihi eşleşmiyor.' });
+  res.json({ token: issue({ role: 'personnel', tenant, tc, name: a.ad }), approved: !!a.approved, ad: a.ad, sicil: a.sicil, dep: a.dep, gorev: a.gorev });
+});
+
+
 app.post('/api/:tenant/personnel/login', (req, res) => {
   const { tenant } = req.params; const { tc, pass } = req.body || {};
   const a = D.getAccount(tenant, tc);
@@ -257,16 +267,29 @@ app.get('/api/:tenant/puantaj', authTenant, (req, res) => {
   const att = D.listAttendance(t); const leaves = D.listLeaves(t).filter(l=>l.status==='onaylandı');
   const [y,mo] = month.split('-').map(Number); const dim = new Date(y,mo,0).getDate();
   const rows = emps.map(e => {
-    const days={}; let work=0,leaveD=0;
+    const days={}; let work=0,leaveD=0,totalMins=0;
     for(let d=1;d<=dim;d++){
       const ds=month+'-'+String(d).padStart(2,'0');
-      const hasAtt=att.some(r=>r.tc===e.tc&&r.day===ds&&r.giris);
+      const dayAtts=att.filter(r=>r.tc===e.tc&&r.day===ds&&r.giris);
       const lv=leaves.find(l=>l.tc===e.tc&&l.start<=ds&&l.end>=ds);
       const dow=new Date(y,mo-1,d).getDay(); let code='·';
-      if(hasAtt){code='X';work++;}else if(lv){code=LEAVE_CODE[lv.type]||'Yİ';leaveD++;}else if(dow===0)code='HT';
+      if(dayAtts.length){
+        let mins=0;
+        dayAtts.forEach(r=>{
+          if(r.giris&&r.cikis){
+            const [gh,gm]=r.giris.split(':').map(Number);
+            const [ch,cm]=r.cikis.split(':').map(Number);
+            mins+=(ch*60+cm)-(gh*60+gm);
+          }
+        });
+        totalMins+=Math.max(0,mins);
+        code=(mins>=450)?'X':'?';
+        work++;
+      } else if(lv){code=LEAVE_CODE[lv.type]||'Yİ';leaveD++;}
+      else if(dow===0)code='HT';
       days[d]=code;
     }
-    return {sicil:e.sicil,ad:e.ad,dep:e.dep,days,work,leaveD};
+    return {sicil:e.sicil,ad:e.ad,dep:e.dep,days,work,leaveD,hours:Math.round(totalMins/60)};
   });
   const lock=D.getLock(t,month);
   res.json({month,locked:!!(lock&&lock.locked),dim,rows});
