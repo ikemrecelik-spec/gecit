@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)file:///C:/Users/IK01/Downloads/gecit-site-v1_20.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geçit — Devam Takip Sistemi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="./gecit-site-v1_files/css2" rel="stylesheet">
+<style>
+  :root{--ink:#0E1A24;--panel:#14242F;--panel-2:#1B313E;--line:#23414F;--amber:#F2B53B;--mint:#34D9A0;--danger:#FF6B6B;--blue:#6FB1FF;--purple:#C792EA;--orange:#FF9E6B;--text:#EAF2F5;--muted:#8FA6B0;--radius:16px;--shadow:0 24px 60px rgba(0,0,0,.45)}
+  *{box-sizing:border-box}html,body{margin:0;padding:0;height:100%}
+  body{background:var(--ink);color:var(--text);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .av{border-radius:9px;display:grid;place-items:center;font-family:'Space Grotesk';font-weight:700;color:#1a1205;flex:0 0 auto}
+  .mono{font-family:'JetBrains Mono';font-weight:700}
+  /* LOGIN */
+  #login{position:fixed;inset:0;display:grid;place-items:center;z-index:100;background:radial-gradient(900px 600px at 70% -10%,#16303d,#0E1A24 60%)}
+  .loginbox{width:380px;max-width:92vw;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:34px 30px;box-shadow:var(--shadow)}
+  .logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(150deg,var(--amber),#e08f1f);display:grid;place-items:center;font-family:'Space Grotesk';font-weight:700;color:#1a1205;font-size:22px;margin-bottom:18px}
+  .loginbox h1{font-family:'Space Grotesk';font-size:22px;margin:0 0 4px}.loginbox p{color:var(--muted);font-size:13px;margin:0 0 22px}
+  .field{margin-bottom:14px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+  .field input{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:11px;padding:12px 14px;font-size:14px}
+  .field input:focus{outline:none;border-color:var(--amber)}
+  .loginbtn{width:100%;background:var(--amber);color:#1a1205;border:0;border-radius:12px;padding:13px;font-weight:700;font-size:15px;cursor:pointer;margin-top:6px}
+  .loginhint{text-align:center;color:var(--muted);font-size:11.5px;margin-top:14px}
+  /* SHELL */
+  #app{display:none;height:100%}
+  .shell{display:grid;grid-template-columns:236px 1fr;height:100vh}
+  .sidebar{background:var(--panel);border-right:1px solid var(--line);padding:18px 14px;display:flex;flex-direction:column;overflow:auto}
+  .brand{display:flex;align-items:center;gap:11px;padding:4px 8px 18px}
+  .brand .lg{width:38px;height:38px;border-radius:11px;background:linear-gradient(150deg,var(--amber),#e08f1f);display:grid;place-items:center;color:#1a1205;font-family:'Space Grotesk';font-weight:700;font-size:18px}
+  .brand b{font-family:'Space Grotesk';font-size:16px;display:block;line-height:1}.brand small{color:var(--muted);font-size:11px}
+  .navitem{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:11px;cursor:pointer;color:var(--muted);font-size:13.5px;font-weight:500;transition:.15s;margin-bottom:3px}
+  .navitem:hover{background:var(--panel-2);color:var(--text)}
+  .navitem.active{background:var(--amber);color:#1a1205;font-weight:600}
+  .navitem .i{width:18px;text-align:center}
+  .navitem .badge{margin-left:auto;background:var(--danger);color:#fff;font-size:10px;font-weight:700;border-radius:8px;padding:1px 7px}
+  .navitem.active .badge{background:#1a1205;color:var(--amber)}
+  .navgrp{font-size:10px;letter-spacing:.7px;color:var(--muted);font-weight:700;padding:14px 12px 6px}
+  .signout{margin-top:auto;color:var(--muted);font-size:12.5px;padding:11px 12px;cursor:pointer;border-radius:10px}
+  .signout:hover{background:var(--panel-2);color:var(--text)}
+  .content{display:flex;flex-direction:column;overflow:hidden;height:100vh}
+  .ctop{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--line);flex-wrap:wrap;gap:12px;flex:0 0 auto}
+  .ctop h2{font-family:'Space Grotesk';font-weight:700;font-size:18px;margin:0}
+  .ctop .sub{color:var(--muted);font-size:12.5px;margin-top:2px}
+  .who-chip{display:flex;align-items:center;gap:9px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:7px 13px}
+  .who-chip .av{width:30px;height:30px;font-size:12px}.who-chip b{font-size:13px}.who-chip small{color:var(--muted);font-size:11px;display:block}
+  .stage{flex:1;overflow:auto;position:relative}
+  #frame{width:100%;height:100%;border:0;display:none;background:var(--ink)}
+  .nview{display:none;padding:24px 28px 50px}.nview.active{display:block}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+  table{width:100%;border-collapse:collapse}
+  thead th{text-align:left;font-size:11px;color:var(--muted);font-weight:600;padding:12px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+  tbody td{padding:12px 16px;border-bottom:1px solid rgba(35,65,79,.5);font-size:13px;vertical-align:middle}
+  tbody tr:hover{background:rgba(27,49,62,.45)}
+  .pill{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:4px 9px;border-radius:7px;white-space:nowrap}
+  .p-ok{background:rgba(52,217,160,.14);color:var(--mint)}.p-wait{background:rgba(143,166,176,.16);color:var(--muted)}.p-late{background:rgba(255,107,107,.14);color:var(--danger)}
+  .who{display:flex;align-items:center;gap:10px}.who .av{width:32px;height:32px;font-size:12px}.who b{font-weight:600;font-size:13px}.who small{color:var(--muted);font-size:11px;display:block}
+  .btn{border:1px solid var(--line);background:var(--panel-2);color:var(--text);border-radius:9px;padding:8px 13px;font-weight:600;font-size:12.5px;cursor:pointer;transition:.15s}
+  .btn.ok:hover{background:rgba(52,217,160,.16);border-color:var(--mint);color:var(--mint)}
+  .btn.no:hover{background:rgba(255,107,107,.14);border-color:var(--danger);color:var(--danger)}
+  .empty{padding:24px;text-align:center;color:var(--muted);font-size:13px}
+  .ch{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid var(--line)}
+  .ch h3{font-family:'Space Grotesk';font-weight:600;font-size:15px;margin:0}
+  .tabs{display:flex;gap:6px;padding:14px 18px 0}
+  .tab{border:0;background:transparent;color:var(--muted);font-weight:600;font-size:13px;padding:8px 13px;border-radius:9px;cursor:pointer}
+  .tab.active{background:var(--panel-2);color:var(--text)}
+  .tabview{display:none}.tabview.active{display:block}
+  .ntxt{padding:14px 18px;color:var(--muted);font-size:12.5px;line-height:1.5}
+  /* MOBIL */
+  .mobwrap{display:grid;grid-template-columns:330px 1fr;gap:26px;align-items:start}
+  .phone{width:310px;height:640px;background:#0a141c;border:10px solid #060c11;border-radius:44px;position:relative;overflow:hidden;box-shadow:var(--shadow);margin:0 auto}
+  .notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:110px;height:24px;background:#060c11;border-radius:13px;z-index:6}
+  .pscreen{position:absolute;inset:0;padding:48px 22px 24px;display:flex;flex-direction:column}
+  .pstep{display:none;flex-direction:column;height:100%}.pstep.on{display:flex}
+  .plogo{width:34px;height:34px;border-radius:10px;background:linear-gradient(150deg,var(--amber),#e08f1f);display:grid;place-items:center;color:#1a1205;font-family:'Space Grotesk';font-weight:700;margin-bottom:14px}
+  .ph1{font-family:'Space Grotesk';font-size:21px;font-weight:600;margin:0 0 5px}
+  .pmut{color:var(--muted);font-size:13px;line-height:1.5;margin:0 0 18px}
+  .pin{width:100%;background:#0d1820;border:1px solid var(--line);color:var(--text);border-radius:12px;padding:13px;font-size:14px;margin-bottom:11px}
+  .pbtn{width:100%;border:0;border-radius:13px;padding:15px;font-weight:700;font-size:15px;cursor:pointer;background:var(--amber);color:#1a1205}
+  .pbtn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  .pcenter{margin:auto 0;text-align:center}
+  .spinner{width:54px;height:54px;border:4px solid var(--line);border-top-color:var(--amber);border-radius:50%;margin:0 auto 16px;animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .vf{width:190px;height:190px;border-radius:22px;margin:14px auto;position:relative;overflow:hidden;background:repeating-linear-gradient(45deg,#0d1820,#0d1820 12px,#101e28 12px,#101e28 24px)}
+  .scanline{position:absolute;left:8%;right:8%;height:3px;background:var(--amber);box-shadow:0 0 14px var(--amber);border-radius:3px;top:10%;animation:scan 1.5s ease-in-out infinite}
+  @keyframes scan{0%,100%{top:10%}50%{top:88%}}
+  .check{width:84px;height:84px;border-radius:50%;background:var(--mint);display:grid;place-items:center;margin:0 auto 16px;animation:pop .5s cubic-bezier(.2,1.3,.4,1)}
+  @keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1)}}
+  .perm{position:absolute;inset:0;background:rgba(6,12,17,.75);display:none;align-items:center;justify-content:center;z-index:7}.perm.on{display:flex}
+  .permbox{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;width:80%;text-align:center}.permbox p{font-size:13px;margin:10px 0 16px}
+  .mside h3{font-family:'Space Grotesk';font-size:18px;margin:0 0 8px}.mside p{color:var(--muted);font-size:14px;line-height:1.6;max-width:440px}
+  .mflow{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+  .mf{display:flex;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:13px 15px;align-items:flex-start}
+  .mf .n{width:26px;height:26px;border-radius:8px;background:var(--panel-2);border:1px solid var(--line);display:grid;place-items:center;font-family:'Space Grotesk';font-weight:700;color:var(--amber);font-size:12px;flex:0 0 auto}
+  .mf b{font-size:13.5px;display:block;margin-bottom:1px}.mf small{color:var(--muted);font-size:12px;line-height:1.4}
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--panel-2);border:1px solid var(--line);color:var(--text);padding:13px 20px;border-radius:12px;font-size:13.5px;font-weight:600;opacity:0;transition:.3s;box-shadow:var(--shadow);z-index:200;max-width:90%}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media(max-width:900px){.shell{grid-template-columns:1fr;height:auto}.content{height:auto}.sidebar{flex-direction:row;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--line)}.signout{margin:0}#frame{height:80vh}.mobwrap{grid-template-columns:1fr}}
+</style>
+
+</head><body><div id="superadmin" style="position:fixed;inset:0;z-index:200;background:radial-gradient(900px 600px at 70% -10%,#16303d,#0E1A24 60%);overflow:auto">
+  <div id="sa-login" style="min-height:100%;display:grid;place-items:center;padding:24px">
+    <div class="loginbox">
+      <div class="logo">G</div>
+      <h1>Geçit · Yönetim Konsolu</h1>
+      <p>Bayi / operatör girişi · tüm işletmeleri yönet</p>
+      <div class="field"><label>Operatör ID</label><input id="sa-id" value="gecit.admin"></div>
+      <div class="field"><label>Şifre</label><input id="sa-pw" type="password" value="123456"></div>
+      <button class="loginbtn" id="sa-btn">Konsola gir</button>
+      <div class="loginhint">Demo: herhangi bir id/şifre ile giriş</div>
+    </div>
+  </div>
+  <div id="sa-tenants" style="display:none;max-width:1000px;margin:0 auto;padding:44px 22px 60px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <div><h1 style="font-family:&#39;Space Grotesk&#39;;font-size:25px;margin:0">İşletmeler</h1><p style="color:var(--muted);font-size:13.5px;margin:5px 0 0">Bir otel seç — yalnız o işletmenin devam takip sistemini görürsün.</p></div>
+      <button id="sa-logout" style="border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:10px;padding:9px 14px;font-weight:600;font-size:12.5px;cursor:pointer">Çıkış</button>
+    </div>
+    <div id="sa-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:24px"></div>
+  </div>
+</div>
+<div id="login" style="display:none">
+  <div class="loginbox">
+    <div class="logo">G</div>
+    <h1>Geçit yönetim girişi</h1>
+    <p>Side Prenses Resort · Devam Takip Sistemi</p>
+    <div class="field"><label>Kullanıcı ID</label><input id="lg-id" value="emre.celik"></div>
+    <div class="field"><label>Şifre</label><input id="lg-pw" type="password" value="123456"></div>
+    <button class="loginbtn" id="lg-btn">Giriş yap</button>
+    <div class="loginhint">Demo: herhangi bir id/şifre ile giriş</div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="shell">
+    <nav class="sidebar">
+      <div class="brand"><div class="lg">G</div><div><b>Geçit</b><small>Devam Takip</small></div></div>
+      <div class="navitem active" data-v="dashboard" data-frame="tpl-dashboard"><span class="i">▤</span> Genel Bakış</div>
+      <div class="navitem" data-v="gecisler" data-frame="tpl-gecisler"><span class="i">⇆</span> Giriş / Çıkış</div>
+      <div class="navitem" data-v="onaylar"><span class="i">✓</span> Onaylar <span class="badge" id="nav-onay">0</span></div>
+      <div class="navgrp">İK SÜREÇLERİ</div>
+      <div class="navitem" data-v="izin" data-frame="tpl-izin"><span class="i">✈</span> İzin Yönetimi</div>
+      <div class="navitem" data-v="vplan" data-frame="tpl-vplan"><span class="i">▤</span> Shiftler</div>
+      <div class="navitem" data-v="sicil" data-frame="tpl-sicil"><span class="i">☰</span> Sicil &amp; Cihaz</div>
+      <div class="navitem" data-v="roller" data-frame="tpl-roller"><span class="i">⚑</span> Roller &amp; Yetkiler</div>
+      <div class="navitem" data-v="raporlar" data-frame="tpl-raporlar"><span class="i">▦</span> Raporlar</div>
+      <div class="navitem" data-v="puantaj" data-frame="tpl-puantaj"><span class="i">▥</span> Aylık Puantaj</div>
+      <div class="navgrp">VARDİYA &amp; KURALLAR</div>
+      <div class="navitem" data-v="tolerans" data-frame="tpl-tolerans"><span class="i">◷</span> Tolerans &amp; Onay</div>
+      <div class="navitem" data-v="vardiya" data-frame="tpl-vardiya"><span class="i">⇄</span> Vardiya Tanıma</div>
+      <div class="navgrp">CİHAZLAR</div>
+      <div class="navitem" data-v="kapi" data-frame="tpl-kapi"><span class="i">⊞</span> Kapı Ekranı</div>
+      <div class="navitem" data-v="mobil"><span class="i">▢</span> Mobil Uygulama</div>
+      <div class="navgrp">SİSTEM</div>
+      <div class="navitem" data-v="ayarlar" data-frame="tpl-ayarlar"><span class="i">⚙</span> Ayarlar</div>
+      <div class="signout" id="signout">⤝ Çıkış yap</div>
+    </nav>
+    <main class="content">
+      <div class="ctop">
+        <div style="display:flex;align-items:center;gap:14px">
+          <button id="sa-back" title="İşletme değiştir" style="border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:10px;padding:8px 12px;font-weight:600;font-size:12.5px;cursor:pointer;display:flex;align-items:center;gap:7px;white-space:nowrap">🏨 <span id="hotel-name">ARNOR DELUXE HOTEL</span> <span style="color:var(--muted);font-weight:400">· değiştir</span></button>
+          <div><h2 id="page-title">Genel Bakış</h2><div class="sub" id="page-sub">Anlık kadro ve özet</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button id="btn-reset" style="border:1px solid var(--line);background:var(--panel-2);color:var(--muted);border-radius:10px;padding:8px 13px;font-weight:600;font-size:12.5px;cursor:pointer">⟲ Demoyu sıfırla</button>
+          <div class="who-chip"><div class="av" style="background:var(--amber)">EÇ</div><div><b>Emre Çelik</b><small>İK / Yönetici</small></div></div>
+        </div>
+      </div>
+      <div class="stage">
+        <iframe id="frame" title="modül" src="./gecit-site-v1_files/saved_resource.html"></iframe>
+
+        <!-- NATIVE: ONAYLAR -->
+        <section class="nview" id="view-onaylar">
+          <div class="card">
+            <div class="tabs"><button class="tab active" data-t="reg">Kayıt onayları <span id="reg-count">(0)</span></button><button class="tab" data-t="fm">Fazla mesai (0)</button><button class="tab" data-t="ht">Hafta tatili mesaisi (0)</button></div>
+            <div class="tabview active" id="tab-reg" style="padding-top:8px">
+              <table><thead><tr><th>Başvuran</th><th>TC Kimlik</th><th>Doğum tarihi</th><th>Eşleşen sicil</th><th></th></tr></thead>
+                <tbody id="reg-body"><tr><td colspan="5" class="empty">Bekleyen kayıt yok</td></tr></tbody></table>
+              <div class="ntxt">TC ve doğum tarihi sicil kaydıyla eşleşince onaylarsın; personel ancak onaydan sonra giriş yapabilir.</div>
+            </div>
+            <div class="tabview" id="tab-fm" style="padding-top:8px">
+              <table><thead><tr><th>Personel</th><th>Tarih</th><th>Süre</th><th></th></tr></thead><tbody>
+                <tr><td colspan="4" class="empty">Bekleyen fazla mesai yok</td></tr>
+              </tbody></table>
+            </div>
+            <div class="tabview" id="tab-ht" style="padding-top:8px">
+              <table><thead><tr><th>Personel</th><th>Tarih</th><th>Çalışma</th><th></th></tr></thead><tbody>
+                <tr><td colspan="4" class="empty">Bekleyen hafta tatili mesaisi yok</td></tr>
+              </tbody></table>
+              <div class="ntxt">Hafta tatilinde çalışmaya gelen personel doğrudan sayılmaz; onaylanınca <b>BÇ</b> (hafta tatili çalışması) olarak puantaja işlenir, reddedilirse yazılmaz.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- NATIVE: MOBİL -->
+        <section class="nview" id="view-mobil">
+          <div class="mobwrap">
+            <div class="phone">
+              <div class="notch"></div>
+              <iframe id="mobileframe" style="position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:34px;background:var(--ink)" src="./gecit-site-v1_files/saved_resource(1).html"></iframe>
+            </div>
+            <div class="mside">
+              <h3>Personel mobil uygulaması</h3>
+              <p>Bu, personelin kendi telefonuna kuracağı gerçek uygulama. Soldaki telefondan canlı deneyebilirsin: <b style="color:var(--text)">Kayıt ol → şifre belirle</b>, isteği <b style="color:var(--text)">Onaylar</b>'dan onayla, telefon otomatik açılır, <b style="color:var(--text)">QR okut → Giriş/Çıkış</b> sisteme işlenir.</p>
+              <div class="mflow">
+                <div class="mf"><div class="n">1</div><div><b>Kayıt + şifre</b><small>Ad, TC, doğum tarihi → kendi şifresini belirler.</small></div></div>
+                <div class="mf"><div class="n">2</div><div><b>İK onayı</b><small>Onaylar → Kayıt onayları'ndan onayla; telefon otomatik açılır.</small></div></div>
+                <div class="mf"><div class="n">3</div><div><b>Giriş / şifremi unuttum</b><small>TC + şifre ile girer; unutursa TC + doğum tarihiyle sıfırlar.</small></div></div>
+                <div class="mf"><div class="n">4</div><div><b>QR ile giriş/çıkış</b><small>Ana ekrandan okutur; Giriş/Çıkış ve Puantaj'a düşer.</small></div></div>
+              </div>
+              <p style="font-size:12px;color:var(--muted);margin-top:14px">Not: Uygulamayı telefonda tek başına açtığında İK onayı demoda otomatik gelir. Sitede bağlı çalışırken gerçek onayı beklersin.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<template id="tpl-mobil"></template>
+<template id="tpl-dashboard"></template>
+<template id="tpl-sicil"></template>
+<template id="tpl-roller"></template>
+<template id="tpl-raporlar"></template>
+<template id="tpl-tolerans"></template>
+<template id="tpl-vardiya"></template>
+<template id="tpl-kapi"></template>
+<script>
+  // ---- ORTAK VERİ KATMANI (tüm modüller buradan okur/yazar) ----
+  window.GECIT = window.GECIT || {
+    shifts:[
+      {nm:'A · Sabah',code:'A',s:'08:00',e:'16:00',df:'06:30',dt:'09:30',early:90,late:15,out:45,c:'#34D9A0'},
+      {nm:'Ara',code:'ARA',s:'12:00',e:'20:00',df:'10:30',dt:'13:30',early:90,late:15,out:45,c:'#6FB1FF'},
+      {nm:'Akşam',code:'AKS',s:'16:00',e:'24:00',df:'14:30',dt:'17:00',early:90,late:15,out:45,c:'#F2B53B'},
+      {nm:'Gece',code:'GCE',s:'24:00',e:'08:00',df:'22:30',dt:'01:00',early:90,late:15,out:45,c:'#C792EA'},
+      {nm:'OFF',code:'OFF',s:'—',e:'—',df:'—',dt:'—',early:0,late:0,out:0,c:'#8FA6B0'}
+    ],
+    departments:[['Mutfak',48],['Servis',55],['Housekeeping',46],['Güvenlik',18],['Önbüro',15],['Muhasebe',11]],
+    positions:['Müdür','Şef','Kısım Şef Yrd.','Görevli','Aşçı','Barmen','Garson'],
+    gorevler:['Resepsiyon Görevlisi','Kat Şefi','Depo Görevlisi','Güvenlik Görevlisi','Servis Komi'],
+    leaveTypes:[{n:'Yıllık izin',c:'Yİ'},{n:'Ücretli izin',c:'M'},{n:'Ücretsiz izin',c:'Üİ'},{n:'Raporlu',c:'RP'},{n:'Ödenen rapor',c:'ÜR'}],
+    holidays:[['Ramazan Bayramı','2026-03-20','Tam gün'],['Ulusal Egemenlik','2026-04-23','Tam gün'],['Emek ve Dayanışma','2026-05-01','Tam gün'],['Gençlik ve Spor','2026-05-19','Tam gün'],['Kurban Bayramı','2026-05-27','Tam gün'],['Demokrasi','2026-07-15','Tam gün'],['Zafer Bayramı','2026-08-30','Tam gün'],['Cumhuriyet Bayramı','2026-10-29','Tam gün']]
+  };
+  window.GECIT.live = window.GECIT.live || {
+    regs:[], currentUser:null, employees:[], att:[], creds:{}
+  };
+  window.GECIT.resetDemo=function(){ if(window.GECIT.resetTenant){ return window.GECIT.resetTenant().then(function(){ return window.GECIT.load(); }).then(function(){ window.GECIT.refresh&&window.GECIT.refresh(); }).catch(function(){}); } };
+  (function(){
+    var GE=window.GECIT; var Q=new URLSearchParams(location.search);
+    GE._api=location.origin;     // boş = aynı sunucu (public/'tan servis)
+    GE._tenant=GE._tenant||'arnor'; GE._token=null;
+    GE.api=function(path,opts){ opts=opts||{}; var h=opts.headers||{}; h['Content-Type']='application/json';
+      if(opts.auth!==false && GE._token)h['Authorization']='Bearer '+GE._token;
+      return fetch(GE._api+'/api'+path,{method:opts.method||'GET',headers:h,body:opts.body?JSON.stringify(opts.body):undefined})
+        .then(function(r){return r.json().catch(function(){return {};}).then(function(d){ if(!r.ok)throw new Error((d&&d.error)||('hata '+r.status)); return d; });}); };
+    GE.apiT=function(path,opts){ return GE.api('/'+GE._tenant+path,opts); };
+    GE.save=function(){};
+    GE.load=function(){
+      if(!GE._token||!GE._tenant) return Promise.resolve(false);
+      return Promise.all([
+        GE.apiT('/registrations',{}).catch(function(){return [];}),
+        GE.apiT('/employees',{}).catch(function(){return [];}),
+        GE.apiT('/attendance',{}).catch(function(){return [];})
+      ]).then(function(res){ var L=GE.live;
+        L.regs=(res[0]||[]).map(function(x){return {ad:x.ad,tc:x.tc,dob:x.dob};});
+        L.employees=(res[1]||[]).map(function(e){ var p=(e.ad||'').trim().split(' '); var soy=p.length>1?p.pop():''; var ad=p.join(' ')||e.ad;
+          return [e.sicil,ad,soy,e.dep||'Servis',e.gorev||'Personel','—','—','Personel',e.status||'aktif',e.device?1:0,e.device?'Telefon':'—',e.tc]; });
+        L.att=(res[2]||[]).map(function(a){ return [a.sicil,a.gorev||'Personel',a.ad,a.vardiya,a.giris,a.cikis||'',a.off||0,a.fm||0,a.izin||'',a.dep||'Servis',a.id]; });
+        return true;
+      });
+    };
+    GE.approveReg=function(tc){return GE.apiT('/registrations/'+tc+'/approve',{method:'POST',body:{}});};
+    GE.rejectReg=function(tc){return GE.apiT('/registrations/'+tc+'/reject',{method:'POST',body:{}});};
+    GE.addEmployee=function(e){return GE.apiT('/employees',{method:'POST',body:e});};
+    GE.updateEmployee=function(tc,e){return GE.apiT('/employees/'+tc,{method:'PUT',body:e});};
+    GE.setEmpStatus=function(tc,s){return GE.apiT('/employees/'+tc+'/status',{method:'POST',body:{status:s}});};
+    GE.resetDevice=function(tc){return GE.apiT('/employees/'+tc+'/reset-device',{method:'POST',body:{}});};
+    GE.resetTenant=function(){return GE.apiT('/reset',{method:'POST',body:{}});};
+    GE.listLeaves=function(st){return GE.apiT('/leaves'+(st?('?status='+st):''),{});};
+    GE.approveLeave=function(id){return GE.apiT('/leaves/'+id+'/approve',{method:'POST',body:{}});};
+    GE.rejectLeave=function(id){return GE.apiT('/leaves/'+id+'/reject',{method:'POST',body:{}});};
+  })();
+  window.GECIT.detectShift=function(hh,mm){ var t=hh*60+mm; var list=window.GECIT.shifts; for(var i=0;i<list.length;i++){ var s=list[i]; if(s.df==='—')continue; var a=s.df.split(':'),b=s.dt.split(':'); var f=(+a[0])*60+(+a[1]),to=(+b[0])*60+(+b[1]); var hit=(f<=to)?(t>=f&&t<=to):(t>=f||t<=to); if(hit)return s.code+' · '+s.s+'–'+s.e; } return ''; };
+  var $=function(s){return document.querySelector(s);};
+  var pad=function(n){return String(n).padStart(2,'0');};
+  var toast=$('#toast'),tt;
+  function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show');},2600);}
+
+  // LOGIN
+  function doLogin(){ $('#login').style.display='none'; $('#app').style.display='block'; activate(document.querySelector('.navitem.active')); window.GECIT.load().then(function(){ window.GECIT.refresh&&window.GECIT.refresh(); }); }
+  $('#lg-btn').addEventListener('click',doLogin);
+
+  // SÜPER-ADMIN · işletme (otel) seçimi
+  var TENANTS=[
+    {id:'arnor',name:'ARNOR DELUXE HOTEL',loc:'Side / Antalya · Side Prenses',staff:241,plan:'Pro',active:true},
+    {id:'belek-gold',name:'BELEK GOLD RESORT',loc:'Belek / Antalya',staff:180,plan:'Pro',active:true},
+    {id:'kemer-bay',name:'KEMER BAY HOTEL',loc:'Kemer / Antalya',staff:95,plan:'Başlangıç',active:false}
+  ];
+  function paintTenants(list){
+    var box=$('#sa-cards');
+    box.innerHTML=list.map(function(t,i){
+      return '<div class="sa-card" data-i="'+i+'" style="background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;cursor:pointer;box-shadow:var(--shadow)">'+
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,var(--amber),#d99a1f);display:grid;place-items:center;color:#1a1205;font-weight:800;font-family:Space Grotesk">'+t.name[0]+'</div>'+
+        '<span style="font-size:11px;font-weight:600;padding:4px 9px;border-radius:7px;background:'+(t.active?'rgba(52,217,160,.15)':'rgba(143,166,176,.14)')+';color:'+(t.active?'var(--mint)':'var(--muted)')+'">'+(t.active?'Aktif':'Pasif')+'</span></div>'+
+        '<div style="font-family:Space Grotesk;font-weight:700;font-size:16px;margin:14px 0 3px">'+t.name+'</div>'+
+        '<div style="color:var(--muted);font-size:12.5px">'+t.loc+'</div>'+
+        '<div style="display:flex;gap:18px;margin-top:14px;font-size:12px;color:var(--muted)"><span><b style="color:var(--text);font-family:JetBrains Mono">'+t.staff+'</b> personel</span><span>Plan: <b style="color:var(--text)">'+t.plan+'</b></span></div></div>';
+    }).join('');
+    box.querySelectorAll('.sa-card').forEach(function(c){ c.addEventListener('click',function(){ selectTenant(list[+c.dataset.i]); }); });
+  }
+  function renderTenants(){ $('#sa-cards').innerHTML='<div style="color:var(--muted)">Yükleniyor…</div>';
+    window.GECIT.api('/tenants',{}).then(function(list){ paintTenants(list.map(function(t){return {id:t.id,name:t.name,loc:t.loc,staff:t.staff,plan:t.plan,active:!!t.active};})); })
+      .catch(function(){ paintTenants(TENANTS); }); }
+  function selectTenant(t){ window.GECIT._tenant=t.id; $('#hotel-name').textContent=t.name; window.GECIT.connectWS&&window.GECIT.connectWS();
+    window.GECIT.load().then(function(){ if(window.renderReg)window.renderReg(); });
+    $('#superadmin').style.display='none'; $('#login').style.display='grid'; }
+  $('#sa-btn').addEventListener('click',function(){
+    var hint=document.querySelector('#sa-login .loginhint'); hint.textContent='Giriş yapılıyor…';
+    window.GECIT.api('/operator/login',{method:'POST',auth:false,body:{username:$('#sa-id').value,password:$('#sa-pw').value}})
+      .then(function(d){ window.GECIT._token=d.token; hint.textContent='Demo: herhangi bir id/şifre ile giriş'; $('#sa-login').style.display='none'; $('#sa-tenants').style.display='block'; renderTenants(); })
+      .catch(function(err){ hint.textContent='Bağlantı/giriş hatası: '+err.message+' · Sunucu çalışıyor mu?'; }); });
+  $('#sa-logout').addEventListener('click',function(){ $('#sa-tenants').style.display='none'; $('#sa-login').style.display='grid'; });
+  $('#sa-back').addEventListener('click',function(){ $('#app').style.display='none'; $('#login').style.display='none'; $('#superadmin').style.display='block'; $('#sa-login').style.display='none'; $('#sa-tenants').style.display='block'; renderTenants(); });
+  $('#lg-pw').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+  $('#signout').addEventListener('click',function(){ $('#app').style.display='none'; $('#login').style.display='grid'; });
+
+  // NAV + FRAME
+  var titles={dashboard:['Genel Bakış','Anlık kadro ve özet'],onaylar:['Onaylar','Kayıt ve fazla mesai onayları'],
+    sicil:['Sicil & Cihaz','Personel kayıtları ve telefon eşleştirme'],roller:['Roller & Yetkiler','Departman bazlı yetkilendirme'],
+    izin:['İzin Yönetimi','Talep, onay ve izin bakiyeleri'],manuel:['Manuel Düzeltme','Geçmişe dönük gerekçeli kayıt düzeltme'],
+    gecisler:['Giriş / Çıkış İşlemleri','Geçiş anomalileri, FM süresi ve hızlı düzeltme'],puantaj:['Aylık Puantaj','Renkli puantaj matrisi ve özet (denetime hazır)'],vplan:['Shiftler','Haftalık vardiya planı ve atama'],
+    raporlar:['Raporlar','Denetime hazır puantaj ve raporlar'],tolerans:['Tolerans & Onay','Vardiya toleransı ve fazla mesai kuralları'],
+    vardiya:['Vardiya Tanıma','Otomatik vardiya ve reddedilen mesaide çıkış'],kapi:['Kapı Ekranı','Dönen QR monitörü'],ayarlar:['Ayarlar','Vardiya, departman ve sistem tanımları (İK)'],mobil:['Mobil Uygulama','Personel uygulaması akışı']};
+  var frame=$('#frame'),curFrame=null;
+  function showFrame(id){ if(curFrame!==id){ frame.srcdoc='<!doctype html>'+document.getElementById(id).innerHTML; curFrame=id; } frame.style.display='block'; }
+  function activate(it){
+    document.querySelectorAll('.navitem').forEach(function(x){x.classList.remove('active');});
+    it.classList.add('active');
+    var v=it.dataset.v, fr=it.dataset.frame;
+    $('#page-title').textContent=titles[v][0]; $('#page-sub').textContent=titles[v][1];
+    document.querySelectorAll('.nview').forEach(function(x){x.classList.remove('active');});
+    if(fr){ showFrame(fr); }
+    else { frame.style.display='none'; curFrame=null; $('#view-'+v).classList.add('active');
+      if(v==='mobil'){ loadMobile(); }
+      if(v==='onaylar'&&window.renderReg){ window.renderReg(); }
+    }
+  }
+  document.querySelectorAll('.navitem').forEach(function(it){ it.addEventListener('click',function(){activate(it);}); });
+
+  // ONAYLAR tabs
+  document.querySelectorAll('#view-onaylar .tab').forEach(function(t){ t.addEventListener('click',function(){
+    document.querySelectorAll('#view-onaylar .tab').forEach(function(x){x.classList.remove('active');}); t.classList.add('active');
+    document.querySelectorAll('#view-onaylar .tabview').forEach(function(x){x.classList.remove('active');}); $('#tab-'+t.dataset.t).classList.add('active');
+  });});
+  var GL=window.GECIT.live;
+  function ini2(n){var p=n.trim().split(' ');return ((p[0]||'')[0]||'')+((p[1]||'')[0]||'');}
+  function realRows(sel){return Array.prototype.filter.call(document.querySelectorAll(sel+' tbody tr'),function(tr){return !tr.querySelector('td.empty');}).length;}
+  function updateOnayBadge(){ $('#nav-onay').textContent=(GL.regs.length+realRows('#tab-fm')+realRows('#tab-ht')); }
+  function renderReg(){
+    var b=$('#reg-body'); $('#reg-count').textContent='('+GL.regs.length+')';
+    if(!GL.regs.length){ b.innerHTML='<tr><td colspan="5" class="empty">Bekleyen kayıt yok</td></tr>'; updateOnayBadge(); return; }
+    b.innerHTML=GL.regs.map(function(r,i){ var tcm=r.tc?r.tc.slice(0,3)+'••••••'+r.tc.slice(-2):'—';
+      return '<tr><td><div class="who"><div class="av" style="background:#6FB1FF">'+ini2(r.ad)+'</div><div><b>'+r.ad+'</b><small>mobil başvuru</small></div></div></td><td class="mono">'+tcm+'</td><td class="mono">'+(r.dob||'—')+'</td><td><span class="pill p-ok">Sicil eşleşti ✓</span></td><td style="text-align:right"><button class="btn ok reg-ok" data-i="'+i+'">Onayla</button> <button class="btn no reg-no" data-i="'+i+'">Reddet</button></td></tr>';
+    }).join('');
+    updateOnayBadge();
+  }
+  window.renderReg=renderReg;
+  window.GECIT.refresh=function(){ try{ if(window.renderReg)window.renderReg(); var act=document.querySelector('.navitem.active'); if(act&&act.dataset.frame){ curFrame=null; showFrame(act.dataset.frame); } }catch(e){} };
+  window.GECIT.connectWS=function(){ try{ if(window.GECIT._ws){try{window.GECIT._ws.close();}catch(e){}} var base=window.GECIT._api||(location.protocol+'//'+location.host); var url=base.replace(/^http/,'ws')+'/ws?tenant='+(window.GECIT._tenant||'arnor'); var ws=new WebSocket(url); window.GECIT._ws=ws; ws.onmessage=function(ev){ var m={};try{m=JSON.parse(ev.data);}catch(e){} if(m.type==='hello')return; window.GECIT.load().then(function(){ window.GECIT.refresh(); }); }; ws.onclose=function(){ setTimeout(window.GECIT.connectWS,3000); }; }catch(e){} };
+  renderReg();
+  $('#reg-body').addEventListener('click',function(e){
+    var ok=e.target.closest('.reg-ok'),no=e.target.closest('.reg-no'); if(!ok&&!no)return;
+    var i=+((ok||no).dataset.i); var r=GL.regs[i]; if(!r)return;
+    var p=ok?window.GECIT.approveReg(r.tc):window.GECIT.rejectReg(r.tc);
+    p.then(function(){ return window.GECIT.load(); }).then(function(){ renderReg(); window.GECIT.refresh&&window.GECIT.refresh();
+        showToast(r.ad+(ok?' · kayıt onaylandı, personelin telefonu otomatik açılır':' · kayıt reddedildi')); })
+     .catch(function(err){ showToast('Hata: '+err.message); });
+  });
+  document.querySelectorAll('.fm-ok').forEach(function(b){ b.addEventListener('click',function(e){ var tr=e.target.closest('tr'); var n=tr.querySelector('b').textContent; var red=b.classList.contains('no'); tr.remove(); updateOnayBadge();
+    if(red) showToast(n+' · fazla mesai REDDEDİLDİ → resmi çıkış vardiya bitişine çekildi (16:00), FM=0, puantaj X. Ham cihaz kaydı korunur.');
+    else showToast(n+' · fazla mesai onaylandı → resmi çıkışa ve puantaja işlendi.'); }); });
+  document.querySelectorAll('.ht-ok').forEach(function(b){ b.addEventListener('click',function(e){ var tr=e.target.closest('tr'); var n=tr.querySelector('b').textContent; var red=b.classList.contains('no'); tr.remove(); updateOnayBadge();
+    if(red) showToast(n+' · hafta tatili mesaisi reddedildi → puantaja yazılmadı.');
+    else showToast(n+' · hafta tatili mesaisi onaylandı → BÇ olarak puantaja işlendi.'); }); });
+
+  // MOBİL — gerçek personel uygulaması (iframe)
+  var mobileLoaded=false;
+  function loadMobile(){ var tpl=document.getElementById('tpl-mobil'); var fr=document.getElementById('mobileframe'); if(!tpl||!fr||mobileLoaded)return; fr.srcdoc='<!doctype html>'+tpl.innerHTML; mobileLoaded=true; }
+  function reloadMobile(){ mobileLoaded=false; var fr=document.getElementById('mobileframe'); if(fr){ fr.removeAttribute('srcdoc'); if(document.getElementById('view-mobil').classList.contains('active'))loadMobile(); } }
+  $('#btn-reset').addEventListener('click',function(){
+    window.GECIT.resetDemo();
+    renderReg();
+    var fmb=document.querySelector('#tab-fm tbody'); if(fmb)fmb.innerHTML='<tr><td colspan="4" class="empty">Bekleyen fazla mesai yok</td></tr>';
+    var htb=document.querySelector('#tab-ht tbody'); if(htb)htb.innerHTML='<tr><td colspan="4" class="empty">Bekleyen hafta tatili mesaisi yok</td></tr>';
+    updateOnayBadge();
+    reloadMobile();
+    curFrame=null; var act=document.querySelector('.navitem.active'); if(act&&act.dataset.frame){showFrame(act.dataset.frame);}
+    showToast('Demo sıfırlandı · onaylar, geçişler ve puantaj boş. Mobilden kayıt olup giriş yapabilirsin.');
+  });
+</script>
+<template id="tpl-ayarlar"></template>
+<template id="tpl-izin"></template>
+<template id="tpl-manuel"></template>
+<template id="tpl-gecisler"></template>
+<template id="tpl-puantaj"></template>
+<template id="tpl-vplan"></template>
+</body></html>
