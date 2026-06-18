@@ -656,44 +656,35 @@ connectWS();
 </template>
 <template id="tpl-sicil">
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sicil & Cihaz — Modül 4</title>
+<title>Sicil & Cihaz</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-  :root{--ink:#0E1A24;--panel:#14242F;--panel-2:#1B313E;--line:#23414F;--amber:#F2B53B;--mint:#34D9A0;--danger:#FF6B6B;--blue:#6FB1FF;--purple:#C792EA;--orange:#FF9E6B;--text:#EAF2F5;--muted:#8FA6B0;--radius:16px;--shadow:0 24px 60px rgba(0,0,0,.45)}
+  :root{--ink:#0E1A24;--panel:#14242F;--panel-2:#1B313E;--line:#23414F;--amber:#F2B53B;--mint:#34D9A0;--danger:#FF6B6B;--blue:#6FB1FF;--text:#EAF2F5;--muted:#8FA6B0;--radius:16px;--shadow:0 24px 60px rgba(0,0,0,.45)}
   *{box-sizing:border-box}html,body{margin:0;padding:0}
-  body{background:radial-gradient(1200px 700px at 80% -10%,#16303d 0%,var(--ink) 55%) fixed;color:var(--text);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  body{background:radial-gradient(1200px 700px at 80% -10%,#16303d,var(--ink) 55%) fixed;color:var(--text);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased}
   .wrap{max-width:1340px;margin:0 auto;padding:22px 16px 70px}
-  .topbar{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-  .logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(150deg,var(--amber),#e08f1f);display:grid;place-items:center;font-family:'Space Grotesk';font-weight:700;color:#1a1205;font-size:19px}
-  .topbar b{font-family:'Space Grotesk';font-weight:700;font-size:17px;display:block;line-height:1.1}.topbar small{color:var(--muted);font-size:12px}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
   .toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--line)}
   .tools{display:flex;gap:8px;flex-wrap:wrap}
   .tb{border:1px solid var(--line);background:var(--panel-2);color:var(--text);border-radius:9px;padding:9px 14px;font-weight:600;font-size:13px;cursor:pointer}.tb:hover{border-color:var(--amber);color:var(--amber)}
   .tb.am{background:var(--amber);color:#1a1205;border-color:var(--amber)}
   .tabs{display:flex;gap:6px;flex-wrap:wrap}
-  .stab{border:1px solid var(--line);background:var(--panel-2);color:var(--muted);border-radius:9px;padding:8px 13px;font-weight:600;font-size:12.5px;cursor:pointer;display:inline-flex;gap:7px;align-items:center}
-  .stab.active{background:var(--amber);color:#1a1205;border-color:var(--amber)}
-  .stab .b{font-family:'JetBrains Mono';font-weight:700;background:rgba(143,166,176,.2);border-radius:6px;padding:1px 7px;font-size:11px}
-  .stab.active .b{background:rgba(26,18,5,.25)}
+  .stab{border:1px solid var(--line);background:var(--panel-2);color:var(--muted);border-radius:9px;padding:8px 13px;font-weight:600;font-size:12.5px;cursor:pointer;display:inline-flex;gap:7px;align-items:center}.stab.active{background:var(--amber);color:#1a1205;border-color:var(--amber)}
+  .stab .b{font-family:'JetBrains Mono';font-weight:700;background:rgba(143,166,176,.2);border-radius:6px;padding:1px 7px;font-size:11px}.stab.active .b{background:rgba(26,18,5,.25)}
   .search{padding:12px 16px;border-bottom:1px solid var(--line)}
   .search input{width:100%;max-width:340px;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:9px 13px;font-size:13px}
   .tbl-wrap{overflow-x:auto}
-  table{width:100%;border-collapse:collapse;min-width:980px}
+  table{width:100%;border-collapse:collapse;min-width:900px}
   thead th{text-align:left;font-size:10.5px;letter-spacing:.4px;color:var(--muted);font-weight:600;padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0;background:var(--panel)}
   tbody td{padding:10px 14px;border-bottom:1px solid rgba(35,65,79,.5);font-size:12.5px;white-space:nowrap}
   tbody tr{cursor:pointer}tbody tr:hover{background:rgba(27,49,62,.5)}
   .mono{font-family:'JetBrains Mono';font-weight:600}
-  .who{display:flex;align-items:center;gap:10px}.av{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-family:'Space Grotesk';font-weight:700;font-size:12px;color:#1a1205;flex:0 0 auto}
+  .who{display:flex;align-items:center;gap:10px}.av{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;font-family:'Space Grotesk';font-weight:700;font-size:12px;color:#1a1205;flex:0 0 auto;background:linear-gradient(135deg,var(--amber),#d99a1f)}
   .who b{font-weight:600;font-size:13px}.who small{color:var(--muted);font-size:11px;display:block}
   .pill{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:4px 9px;border-radius:7px}
-  .p-aktif{background:rgba(52,217,160,.14);color:var(--mint)}.p-cikan{background:rgba(143,166,176,.16);color:var(--muted)}.p-yasakli{background:rgba(255,107,107,.16);color:var(--danger)}
-  .dev{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted)}.dev .dot{width:7px;height:7px;border-radius:50%;background:var(--mint)}
-  .yet{font-family:'JetBrains Mono';font-size:11px;color:var(--blue)}
-  .det{border:1px solid var(--line);background:var(--panel-2);color:var(--muted);border-radius:7px;padding:6px 11px;font-size:11.5px;font-weight:600;cursor:pointer}.det:hover{border-color:var(--amber);color:var(--amber)}
+  .p-aktif{background:rgba(52,217,160,.14);color:var(--mint)}.p-cikan{background:rgba(143,166,176,.16);color:var(--muted)}
   .footer{padding:12px 16px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;font-family:'JetBrains Mono'}
-  /* drawer */
   .ov{position:fixed;inset:0;background:rgba(6,12,17,.55);display:none;z-index:60}.ov.on{display:block}
   .drawer{position:fixed;top:0;right:0;height:100%;width:560px;max-width:96vw;background:var(--panel);border-left:1px solid var(--line);box-shadow:var(--shadow);z-index:61;transform:translateX(100%);transition:.25s;display:flex;flex-direction:column}
   .drawer.on{transform:translateX(0)}
@@ -706,7 +697,7 @@ connectWS();
   .pane{display:none}.pane.active{display:block}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:13px}.grid2 .full{grid-column:1/-1}
   label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px}
-  input,select{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:9px;padding:9px 11px;font-size:13px}
+  input,select{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:9px;padding:9px 11px;font-size:13px;font-family:inherit}
   input:focus,select:focus{outline:none;border-color:var(--amber)}
   .blk{margin-bottom:14px}
   .devbox{background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
@@ -714,183 +705,277 @@ connectWS();
   .reset{border:1px solid var(--danger);background:rgba(255,107,107,.08);color:var(--danger);border-radius:9px;padding:8px 13px;font-weight:600;font-size:12px;cursor:pointer}
   .docs{display:flex;flex-direction:column;gap:8px}
   .doc{display:flex;align-items:center;gap:10px;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-size:12.5px}
-  .doc .ok{margin-left:auto;color:var(--mint);font-size:11.5px}
+  .doc .del{margin-left:auto;background:none;border:0;color:var(--danger);font-size:14px;cursor:pointer;padding:2px 6px}
+  .doc-add{display:flex;gap:8px;margin-top:10px}.doc-add input{flex:1}
+  .doc-add button{background:var(--amber);color:#1a1205;border:0;border-radius:9px;padding:0 14px;font-weight:600;font-size:12.5px;cursor:pointer;white-space:nowrap}
   .dfoot{display:flex;align-items:center;gap:10px;padding:14px 20px;border-top:1px solid var(--line)}
   .quit{border:1px solid var(--danger);background:none;color:var(--danger);border-radius:10px;padding:10px 14px;font-weight:600;font-size:12.5px;cursor:pointer}
   .save{margin-left:auto;background:var(--amber);color:#1a1205;border:0;border-radius:10px;padding:11px 18px;font-weight:700;font-size:13px;cursor:pointer}
   .ghost{background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:11px 16px;font-weight:600;font-size:13px;cursor:pointer}
-  .quitbox{background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:11px;padding:13px;margin-top:8px;display:none}
-  .quitbox.on{display:block}
-  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--panel-2);border:1px solid var(--line);color:var(--text);padding:13px 20px;border-radius:12px;font-size:13.5px;font-weight:600;opacity:0;transition:.3s;box-shadow:var(--shadow);z-index:90;max-width:90%}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--panel-2);border:1px solid var(--line);color:var(--text);padding:13px 20px;border-radius:12px;font-size:13.5px;font-weight:600;opacity:0;transition:.3s;z-index:90}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .bulk-area{padding:20px}
+  .bulk-area textarea{width:100%;height:280px;background:var(--ink);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:12px;font-family:'JetBrains Mono';font-size:12.5px;line-height:1.5;resize:vertical}
+  .bulk-help{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6}
   @media(max-width:600px){.grid2{grid-template-columns:1fr}}
 </style>
 <div class="wrap">
-  <div class="topbar"><div class="logo">G</div><div><b>Geçit · Sicil & Cihaz</b><small>ARNOR DELUXE HOTEL · personel kayıtları, cihaz eşleştirme</small></div></div>
   <div class="card">
     <div class="toolbar">
-      <div class="tools"><button class="tb am" id="t-new">+ Yeni Sicil</button><button class="tb" id="t-bulk">⇪ Toplu Sicil</button><button class="tb" id="t-filter">⌕ Filtre</button></div>
-      <div class="tabs" id="stabs">
+      <div class="tools"><button class="tb am" id="t-new">+ Yeni Sicil</button><button class="tb" id="t-bulk">Toplu Sicil</button></div>
+      <div class="tabs">
         <div class="stab active" data-s="aktif">Aktifler <span class="b" id="c-aktif">0</span></div>
         <div class="stab" data-s="cikan">İşten çıkanlar <span class="b" id="c-cikan">0</span></div>
-        <div class="stab" data-s="yasakli">Yasaklılar <span class="b" id="c-yasakli">0</span></div>
         <div class="stab" data-s="hepsi">Hepsi <span class="b" id="c-hepsi">0</span></div>
       </div>
     </div>
-    <div class="search"><input id="q" placeholder="Ara — ad, soyad, görev, bölüm…"></div>
+    <div class="search"><input id="q" placeholder="Ara — ad, soyad, görev, bölüm..."></div>
     <div class="tbl-wrap">
-      <table><thead><tr><th>ID</th><th>Ad Soyad</th><th>Bölüm</th><th>Görev</th><th>Pozisyon</th><th>Cihaz</th><th>Geçiş yetkisi</th><th>Durum</th><th></th></tr></thead><tbody id="body"></tbody></table>
+      <table><thead><tr><th>Sicil</th><th>Ad Soyad</th><th>Bölüm</th><th>Görev</th><th>TC</th><th>Cihaz</th><th>Durum</th></tr></thead><tbody id="body"></tbody></table>
     </div>
     <div class="footer" id="foot">Toplam 0 personel</div>
   </div>
 </div>
-
 <div class="ov" id="ov"></div>
 <aside class="drawer" id="drawer">
-  <div class="dh"><div class="av" id="d-av" style="width:42px;height:42px;font-size:15px">--</div><div><b id="d-title" style="font-family:'Space Grotesk';font-size:16px">Yeni Sicil</b><div id="d-sub" style="color:var(--muted);font-size:12px">—</div></div><button class="x" id="d-x">×</button></div>
+  <div class="dh">
+    <div class="av" id="d-av" style="width:42px;height:42px;font-size:15px">--</div>
+    <div><b id="d-title" style="font-family:Space Grotesk;font-size:16px">Yeni Sicil</b><div id="d-sub" style="color:var(--muted);font-size:12px">—</div></div>
+    <button class="x" id="d-x">×</button>
+  </div>
   <div class="dtabs">
-    <button class="dtab active" data-p="kisisel">Kişisel & İletişim</button>
+    <button class="dtab active" data-p="kisisel">Kişisel</button>
     <button class="dtab" data-p="org">Organizasyon</button>
-    <button class="dtab" data-p="cihaz">Cihaz / Geçiş & Belgeler</button>
+    <button class="dtab" data-p="cihaz">Cihaz & Belgeler</button>
   </div>
   <div class="dbody">
     <section class="pane active" id="p-kisisel">
       <div class="grid2">
         <div class="blk"><label>Ad</label><input id="f-ad"></div>
         <div class="blk"><label>Soyad</label><input id="f-soyad"></div>
-        <div class="blk"><label>TC Kimlik No</label><input id="f-tc" class="mono" placeholder="•••••••••••"></div>
-        <div class="blk"><label>Doğum tarihi</label><input id="f-dogum" type="date"></div>
+        <div class="blk full"><label>TC Kimlik No (11 hane)</label><input id="f-tc" class="mono" maxlength="11" placeholder="•••••••••••"></div>
+        <div class="blk full"><label>Doğum tarihi (gg.aa.yyyy)</label><input id="f-dogum" class="mono" maxlength="10" placeholder="gg.aa.yyyy"></div>
         <div class="blk"><label>Telefon</label><input id="f-tel" class="mono" placeholder="05•• ••• ••••"></div>
-        <div class="blk"><label>E-posta</label><input id="f-mail"></div>
-        <div class="blk"><label>Kan grubu</label><select id="f-kan"><option>—</option><option>A Rh+</option><option>A Rh-</option><option>0 Rh+</option><option>0 Rh-</option><option>B Rh+</option><option>AB Rh+</option></select></div>
         <div class="blk"><label>Cinsiyet</label><select id="f-cins"><option>—</option><option>Kadın</option><option>Erkek</option></select></div>
-        <div class="blk full"><label>Adres</label><input id="f-adres"></div>
       </div>
     </section>
     <section class="pane" id="p-org">
       <div class="grid2">
-        <div class="blk"><label>Firma</label><select id="f-firma"><option>ARNOR DELUXE HOTEL</option></select></div>
         <div class="blk"><label>Bölüm</label><select id="f-bolum"></select></div>
-        <div class="blk"><label>Görev</label><input id="f-gorev" placeholder="ör. Garson"></div>
-        <div class="blk"><label>Pozisyon</label><input id="f-poz" placeholder="ör. Servis Komi"></div>
-        <div class="blk"><label>Yaka</label><select id="f-yaka"><option>Mavi yaka</option><option>Beyaz yaka</option></select></div>
+        <div class="blk"><label>Görev</label><select id="f-gorev"></select></div>
         <div class="blk"><label>İşe giriş tarihi</label><input id="f-giris" type="date"></div>
         <div class="blk"><label>Direktörlük</label><select id="f-dir"><option>—</option><option>F&B</option><option>Rooms Division</option><option>Mali İşler</option></select></div>
-        <div class="blk"><label>Mesai periyodu</label><select id="f-per"><option>VardiyalıPeriyod</option><option>24:00–08:00 vardiya</option><option>Sabit (09:00–17:00)</option></select></div>
       </div>
     </section>
     <section class="pane" id="p-cihaz">
       <div class="devbox">
-        <div class="row"><div><b style="font-size:13px">Bağlı cihaz</b><div style="color:var(--muted);font-size:11.5px;margin-top:2px" id="d-device">iPhone · son giriş bugün 07:26</div></div><button class="reset" id="d-reset">Telefon sıfırla</button></div>
-        <div style="color:var(--muted);font-size:11.5px;line-height:1.5">Hesap tek telefona kilitlidir. Yüz/parmak verisi tutulmaz (KVKK); doğrulama QR + cihaz eşleştirme iledir. Telefon değişimi yalnız İK sıfırlamasıyla.</div>
-      </div>
-      <div class="grid2">
-        <div class="blk"><label>Kart No</label><input id="f-kart" class="mono" placeholder="00000000000000"></div>
-        <div class="blk"><label>Geçiş yetkisi</label><select id="f-yetki"><option>FULL ACCESS</option><option>VardiyalıPeriyod</option><option>Sınırlı (kendi katı)</option></select></div>
+        <div class="row"><div><b style="font-size:13px">Bağlı cihaz</b><div style="color:var(--muted);font-size:11.5px;margin-top:2px" id="d-device">—</div></div><button class="reset" id="d-reset">Telefon sıfırla</button></div>
+        <div style="color:var(--muted);font-size:11.5px;line-height:1.5">Hesap tek telefona kilitlidir. KVKK gereği biyometrik veri tutulmaz; doğrulama QR + cihaz eşleştirme ile yapılır.</div>
       </div>
       <label style="margin-top:6px">Belgeler</label>
-      <div class="docs">
-        <div class="doc">📄 Kimlik fotokopisi <span class="ok">✓ yüklü</span></div>
-        <div class="doc">📄 İş sözleşmesi <span class="ok">✓ yüklü</span></div>
-        <div class="doc">📄 Sağlık raporu <span style="margin-left:auto;color:var(--muted);font-size:11.5px">— eksik</span></div>
-        <div class="doc" style="cursor:pointer;border-style:dashed;color:var(--muted)">＋ Belge ekle</div>
-      </div>
-      <div class="quitbox" id="quitbox">
-        <label>İşten çıkış tarihi</label><input id="f-cikis" type="date">
-        <div style="display:flex;gap:8px;margin-top:10px"><button class="quit" id="quit-confirm">Pasife al</button><button class="ghost" id="quit-cancel">Vazgeç</button></div>
-        <div style="color:var(--muted);font-size:11.5px;margin-top:8px">Kayıt ve geçmiş silinmez; personel "İşten çıkanlar" sekmesine taşınır, cihaz erişimi kapatılır.</div>
-      </div>
+      <div class="docs" id="docs"></div>
+      <div class="doc-add"><input id="doc-name" placeholder="Belge adı (ör. İş sözleşmesi)"><button id="doc-add-btn">Ekle</button></div>
     </section>
   </div>
-  <div class="dfoot"><button class="quit" id="d-quit">İşten çıkar</button><button class="ghost" id="d-close2">Kapat</button><button class="save" id="d-save">Kaydet</button></div>
+  <div class="dfoot">
+    <button class="quit" id="d-quit" style="display:none">İşten çıkar</button>
+    <button class="ghost" id="d-cancel">İptal</button>
+    <button class="save" id="d-save">Kaydet</button>
+  </div>
+</aside>
+<aside class="drawer" id="bdrawer" style="width:640px">
+  <div class="dh"><b style="font-family:Space Grotesk;font-size:16px">Toplu Sicil Ekle</b><button class="x" id="bd-x">×</button></div>
+  <div class="dbody bulk-area">
+    <div class="bulk-help">Her satıra bir personel yazın. Sıralama: <b>Ad Soyad ; TC ; gg.aa.yyyy ; Bölüm ; Görev</b><br>Örnek: <code>Mehmet Yılmaz ; 12345678901 ; 15.05.1990 ; Servis ; Garson</code></div>
+    <textarea id="bulk-text" placeholder="Ad Soyad ; TC ; gg.aa.yyyy ; Bölüm ; Görev"></textarea>
+  </div>
+  <div class="dfoot"><button class="ghost" id="bd-cancel">İptal</button><button class="save" id="bd-save" style="margin-left:auto">Hepsini ekle</button></div>
 </aside>
 <div class="toast" id="toast"></div>
 <script>
-  var toast=document.getElementById('toast'),tt;function showToast(m){toast.textContent=m;toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show');},2600);}
-  var COLORS=['#34D9A0','#6FB1FF','#C792EA','#FF9E6B','#F2B53B'];
-  var GSTORE=(window.parent&&window.parent.GECIT)?window.parent.GECIT:null;
-  var _bolumler=GSTORE?GSTORE.departments.map(function(d){return d[0];}):['Servis','Mutfak','Housekeeping','Güvenlik','Önbüro','Muhasebe','Genel Müdürlük'];
-  document.getElementById('f-bolum').innerHTML=_bolumler.map(function(d){return '<option>'+d+'</option>';}).join('');
-  // [id, ad, soyad, bolum, gorev, pozisyon, kart, yetki, durum, devre(bool tel bağlı), tel]
-  var data=(window.parent&&window.parent.GECIT&&window.parent.GECIT.live)?window.parent.GECIT.live.employees:[
-    [2683,'Abdulkadir','Çifçi','Servis','Servis Komi','Servis','00000000013149','FULL ACCESS','aktif',1,'iPhone 12'],
-    [2737,'Abdullah','Çoban','Servis','Barmen / Barmaid','Bar','00000000032785','VardiyalıPeriyod','aktif',1,'Samsung A52'],
-    [2747,'Abdullah','Görenli','Güvenlik','Güvenlik Görevlisi','Güvenlik','00000000024113','FULL ACCESS','aktif',1,'iPhone 11'],
-    [2229,'Abdülrezak','Tunç','Muhasebe','Lojman Sorumlusu','İdari','00000000050062','VardiyalıPeriyod','aktif',1,'Redmi Note 11'],
-    [2587,'Ada','Gökçe','Servis','Waiter (Garson)','Servis','00000000027570','VardiyalıPeriyod','aktif',1,'iPhone 13'],
-    [2733,'Adem','Erdal','Mutfak','Kısım Şef Yrd. Asistan','Mutfak','00000000031406','FULL ACCESS','aktif',1,'Samsung S21'],
-    [260,'Adem','Tekelier','Housekeeping','Terzi','HK','00000000025658','VardiyalıPeriyod','aktif',1,'iPhone SE'],
-    [2576,'Adeviye','Balcı','Mutfak','Kısım Şef Yrd. Asistan','Mutfak','00000000003741','VardiyalıPeriyod','aktif',1,'Oppo A74'],
-    [2653,'Ahmet','İlisulu','Mutfak','Depo Görevlisi','Mutfak','00000000003129','VardiyalıPeriyod','aktif',1,'iPhone 12'],
-    [2566,'Ahmet','Kara','Servis','Captain (Rest.)','Servis','00000000016894','FULL ACCESS','aktif',1,'Samsung A53'],
-    [2379,'Ahmet Berk','Özdemir','Önbüro','Resepsiyon Görevlisi','Önbüro','00000000063926','VardiyalıPeriyod','aktif',1,'iPhone 14'],
-    [2363,'Ahmet Ferit','Çevlik','Genel Müdürlük','Finans Müdürü','Yönetim','00000000000000','FULL ACCESS','aktif',1,'iPhone 15'],
-    [2533,'Aleyna','Tozcu','Housekeeping','Kat Şefi','HK','00000000024221','FULL ACCESS','aktif',1,'Samsung A34'],
-    [1707,'Ahmet','Punar','Servis','Waiter (Garson)','Servis','00000000033773','VardiyalıPeriyod','cikan',0,'—'],
-    [1422,'Mert','Aksoy','Önbüro','Belboy','Önbüro','00000000011902','VardiyalıPeriyod','cikan',0,'—'],
-    [988,'Hülya','Demir','Servis','Garson','Servis','00000000009921','VardiyalıPeriyod','yasakli',0,'—']
-  ];
-  function ini(a,s){return (a[0]||'')+(s[0]||'');}
-  function colorOf(i){return COLORS[i%COLORS.length];}
-  var STAT={aktif:['Aktif','p-aktif'],cikan:['İşten çıktı','p-cikan'],yasakli:['Yasaklı','p-yasakli']};
-  var active='aktif',editIdx=-1;
-  function counts(){
-    document.getElementById('c-aktif').textContent=data.filter(function(d){return d[8]==='aktif';}).length;
-    document.getElementById('c-cikan').textContent=data.filter(function(d){return d[8]==='cikan';}).length;
-    document.getElementById('c-yasakli').textContent=data.filter(function(d){return d[8]==='yasakli';}).length;
-    document.getElementById('c-hepsi').textContent=data.length;
+function getG(){try{return window.parent&&window.parent.GECIT||null;}catch(e){return null;}}
+var API=location.origin;
+async function req(path,opts){
+  var g=getG(); var tenant=(g&&g._tenant)||'arnor'; var tok=(g&&g._token)||null;
+  opts=opts||{}; var h={'Content-Type':'application/json'};
+  if(tok)h['Authorization']='Bearer '+tok;
+  var r=await fetch(API+'/api/'+tenant+path,{method:opts.method||'GET',headers:h,body:opts.body?JSON.stringify(opts.body):undefined});
+  var d=null;try{d=await r.json();}catch(e){}
+  if(!r.ok)throw new Error((d&&d.error)||('Hata '+r.status));
+  return d;
+}
+var DEFAULT_DEPS=['Servis','Mutfak','Housekeeping','Güvenlik','Önbüro','Muhasebe','Teknik','Animasyon'];
+var DEFAULT_GOREVS=['Müdür','Şef','Garson','Aşçı','Resepsiyonist','Güvenlik','Temizlik','Teknisyen','Animatör','Personel'];
+var employees=[], curStatus='aktif', curEdit=null, curDocs=[];
+function ini(s){var p=(s||'').trim().split(' ');return ((p[0]||'')[0]||'')+((p[1]||'')[0]||'');}
+function toast(t){var el=document.getElementById('toast');el.textContent=t;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show');},2500);}
+document.getElementById('f-dogum').addEventListener('input',function(){var v=this.value.replace(/[^0-9]/g,'');if(v.length>=4)v=v.slice(0,2)+'.'+v.slice(2,4)+'.'+v.slice(4,8);else if(v.length>=2)v=v.slice(0,2)+'.'+v.slice(2);this.value=v;});
+async function loadSettings(){
+  try{var s=await req('/settings');
+    var deps=(s.departments&&s.departments.length)?s.departments:DEFAULT_DEPS;
+    var govs=(s.positions&&s.positions.length)?s.positions:DEFAULT_GOREVS;
+    document.getElementById('f-bolum').innerHTML=deps.map(function(d){return '<option>'+d+'</option>';}).join('');
+    document.getElementById('f-gorev').innerHTML=govs.map(function(g){return '<option>'+g+'</option>';}).join('');
+  }catch(e){
+    document.getElementById('f-bolum').innerHTML=DEFAULT_DEPS.map(function(d){return '<option>'+d+'</option>';}).join('');
+    document.getElementById('f-gorev').innerHTML=DEFAULT_GOREVS.map(function(g){return '<option>'+g+'</option>';}).join('');
   }
-  function render(){
-    var q=(document.getElementById('q').value||'').toLowerCase();var b=document.getElementById('body');b.innerHTML='';var n=0;
-    data.forEach(function(d,i){
-      if(active!=='hepsi'&&d[8]!==active)return;
-      var hay=(d[1]+' '+d[2]+' '+d[4]+' '+d[3]).toLowerCase();if(q&&hay.indexOf(q)<0)return;n++;
-      var st=STAT[d[8]];
-      b.insertAdjacentHTML('beforeend','<tr data-i="'+i+'"><td class="mono" style="color:var(--muted)">'+d[0]+'</td><td><div class="who"><div class="av" style="background:'+colorOf(i)+'">'+ini(d[1],d[2])+'</div><div><b>'+d[1]+' '+d[2]+'</b></div></div></td><td>'+d[3]+'</td><td style="color:var(--muted)">'+d[4]+'</td><td style="color:var(--muted)">'+d[5]+'</td><td>'+(d[9]?'<span class="dev"><span class="dot"></span>'+d[10]+'</span>':'<span style="color:var(--muted)">—</span>')+'</td><td class="yet">'+d[7]+'</td><td><span class="pill '+st[1]+'">'+st[0]+'</span></td><td style="text-align:right"><button class="det" data-i="'+i+'">Detay</button></td></tr>');
-    });
-    document.getElementById('foot').textContent='Toplam '+data.length+' personel · '+n+' gösteriliyor';
-    counts();
-  }
+}
+async function loadEmployees(){
+  try{employees=await req('/employees');}catch(e){employees=[];toast('Veri alınamadı: '+e.message);}
   render();
-  document.getElementById('stabs').addEventListener('click',function(e){var t=e.target.closest('.stab');if(!t)return;document.querySelectorAll('.stab').forEach(function(x){x.classList.remove('active');});t.classList.add('active');active=t.dataset.s;render();});
-  document.getElementById('q').addEventListener('input',render);
-  document.getElementById('body').addEventListener('click',function(e){var tr=e.target.closest('tr');if(!tr)return;openDrawer(+tr.dataset.i);});
-
-  // drawer
-  var ov=document.getElementById('ov'),drawer=document.getElementById('drawer');
-  function setVal(id,v){document.getElementById(id).value=v||'';}
-  function openDrawer(i){editIdx=i;
-    document.querySelectorAll('.dtab').forEach(function(x,k){x.classList.toggle('active',k===0);});
-    document.querySelectorAll('.pane').forEach(function(x,k){x.classList.toggle('active',k===0);});
-    document.getElementById('quitbox').classList.remove('on');
-    if(i<0){document.getElementById('d-title').textContent='Yeni Sicil';document.getElementById('d-sub').textContent='Yeni personel kaydı';document.getElementById('d-av').textContent='＋';document.getElementById('d-av').style.background='var(--panel-2)';document.getElementById('d-quit').style.display='none';
-      ['f-ad','f-soyad','f-tc','f-tel','f-mail','f-adres','f-gorev','f-poz','f-kart'].forEach(function(id){setVal(id,'');});}
-    else{var d=data[i];document.getElementById('d-title').textContent=d[1]+' '+d[2];document.getElementById('d-sub').textContent=d[3]+' · '+d[4]+' · #'+d[0];var av=document.getElementById('d-av');av.textContent=ini(d[1],d[2]);av.style.background=colorOf(i);document.getElementById('d-quit').style.display=d[8]==='aktif'?'':'none';
-      setVal('f-ad',d[1]);setVal('f-soyad',d[2]);setVal('f-gorev',d[4]);setVal('f-poz',d[5]);setVal('f-kart',d[6]);document.getElementById('f-bolum').value=d[3];document.getElementById('f-yetki').value=d[7];
-      document.getElementById('d-device').textContent=d[9]?d[10]+' · bağlı':'cihaz bağlı değil';}
-    ov.classList.add('on');drawer.classList.add('on');
+}
+function render(){
+  var q=(document.getElementById('q').value||'').toLowerCase().trim();
+  var aktif=employees.filter(function(e){return e.status==='aktif';});
+  var cikan=employees.filter(function(e){return e.status!=='aktif';});
+  document.getElementById('c-aktif').textContent=aktif.length;
+  document.getElementById('c-cikan').textContent=cikan.length;
+  document.getElementById('c-hepsi').textContent=employees.length;
+  var list=curStatus==='aktif'?aktif:(curStatus==='cikan'?cikan:employees);
+  if(q)list=list.filter(function(e){return (e.ad||'').toLowerCase().indexOf(q)>=0||(e.dep||'').toLowerCase().indexOf(q)>=0||(e.gorev||'').toLowerCase().indexOf(q)>=0||String(e.sicil||'').indexOf(q)>=0;});
+  var body=document.getElementById('body');
+  if(!list.length){body.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:34px">Henüz kayıt yok</td></tr>';}
+  else{
+    body.innerHTML=list.map(function(e){
+      var dev=e.device?'<span style="display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:11.5px"><span style="width:7px;height:7px;border-radius:50%;background:var(--mint)"></span>Bağlı</span>':'<span style="color:var(--muted);font-size:11px">—</span>';
+      return '<tr data-tc="'+e.tc+'">'+
+        '<td class="mono">'+(e.sicil||'—')+'</td>'+
+        '<td><div class="who"><div class="av">'+ini(e.ad)+'</div><div><b>'+(e.ad||'')+'</b></div></div></td>'+
+        '<td>'+(e.dep||'—')+'</td><td>'+(e.gorev||'—')+'</td>'+
+        '<td class="mono" style="font-size:11px">'+((e.tc||'').slice(0,3)+'••••'+(e.tc||'').slice(-2))+'</td>'+
+        '<td>'+dev+'</td>'+
+        '<td><span class="pill '+(e.status==='aktif'?'p-aktif':'p-cikan')+'">'+(e.status==='aktif'?'Aktif':'Çıkan')+'</span></td>'+
+        '</tr>';
+    }).join('');
+    body.querySelectorAll('tr').forEach(function(tr){tr.addEventListener('click',function(){openEdit(tr.dataset.tc);});});
   }
-  function closeDrawer(){ov.classList.remove('on');drawer.classList.remove('on');}
-  document.getElementById('d-x').addEventListener('click',closeDrawer);
-  document.getElementById('d-close2').addEventListener('click',closeDrawer);
-  ov.addEventListener('click',closeDrawer);
-  document.querySelector('.dtabs').addEventListener('click',function(e){var t=e.target.closest('.dtab');if(!t)return;document.querySelectorAll('.dtab').forEach(function(x){x.classList.remove('active');});t.classList.add('active');document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('active');});document.getElementById('p-'+t.dataset.p).classList.add('active');});
-  document.getElementById('t-new').addEventListener('click',function(){openDrawer(-1);});
-  document.getElementById('t-bulk').addEventListener('click',function(){showToast('Toplu Sicil · Excel şablonuyla toplu personel içe aktarımı');});
-  document.getElementById('t-filter').addEventListener('click',function(){document.getElementById('q').focus();});
-  document.getElementById('d-reset').addEventListener('click',function(){if(editIdx<0)return;var d=data[editIdx];d[9]=0;d[10]='—';document.getElementById('d-device').textContent='cihaz bağlı değil';render();showToast(d[1]+' '+d[2]+' · telefon sıfırlandı (yeni cihazdan kayıt açılabilir, loglandı)');});
-  document.getElementById('d-save').addEventListener('click',function(){
-    var ad=document.getElementById('f-ad').value.trim(),soyad=document.getElementById('f-soyad').value.trim();
-    if(!ad){showToast('Ad gir');return;}
-    if(editIdx<0){var id=2700+Math.floor(Math.random()*300);data.unshift([id,ad,soyad,document.getElementById('f-bolum').value,document.getElementById('f-gorev').value||'—',document.getElementById('f-poz').value||'—',document.getElementById('f-kart').value||'—',document.getElementById('f-yetki').value,'aktif',0,'—']);showToast(ad+' '+soyad+' · yeni sicil eklendi (#'+id+')');}
-    else{var d=data[editIdx];d[1]=ad;d[2]=soyad;d[4]=document.getElementById('f-gorev').value;d[5]=document.getElementById('f-poz').value;d[6]=document.getElementById('f-kart').value;d[3]=document.getElementById('f-bolum').value;d[7]=document.getElementById('f-yetki').value;showToast(ad+' '+soyad+' · kayıt güncellendi');}
-    render();closeDrawer();
+  document.getElementById('foot').textContent='Toplam '+employees.length+' personel · '+aktif.length+' aktif';
+}
+function openNew(){
+  curEdit=null; curDocs=[];
+  document.getElementById('d-title').textContent='Yeni Sicil';
+  document.getElementById('d-sub').textContent='Yeni personel kaydı';
+  document.getElementById('d-av').textContent='?+';
+  document.getElementById('d-quit').style.display='none';
+  ['f-ad','f-soyad','f-tc','f-dogum','f-tel'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('f-cins').value='—'; document.getElementById('f-dir').value='—';
+  document.getElementById('f-giris').value='';
+  if(document.getElementById('f-bolum').options.length)document.getElementById('f-bolum').selectedIndex=0;
+  if(document.getElementById('f-gorev').options.length)document.getElementById('f-gorev').selectedIndex=0;
+  renderDocs(); switchPane('kisisel');
+  openDrawer();
+}
+async function openEdit(tc){
+  var e=employees.find(function(x){return x.tc===tc;});
+  if(!e)return;
+  curEdit=e; 
+  document.getElementById('d-title').textContent=e.ad||'Sicil';
+  document.getElementById('d-sub').textContent='Sicil #'+(e.sicil||'—');
+  document.getElementById('d-av').textContent=ini(e.ad);
+  document.getElementById('d-quit').style.display=e.status==='aktif'?'block':'none';
+  var p=(e.ad||'').trim().split(' '); var soy=p.length>1?p.pop():''; var ad=p.join(' ');
+  document.getElementById('f-ad').value=ad;
+  document.getElementById('f-soyad').value=soy;
+  document.getElementById('f-tc').value=e.tc||'';
+  document.getElementById('f-dogum').value=e.dob||'';
+  document.getElementById('f-tel').value=e.tel||'';
+  document.getElementById('f-cins').value=e.cins||'—';
+  document.getElementById('f-dir').value=e.dir||'—';
+  document.getElementById('f-giris').value=e.giris||'';
+  if(document.getElementById('f-bolum').querySelector('option[value="'+(e.dep||'')+'"]')){document.getElementById('f-bolum').value=e.dep;}
+  if(document.getElementById('f-gorev').querySelector('option[value="'+(e.gorev||'')+'"]')){document.getElementById('f-gorev').value=e.gorev;}
+  document.getElementById('d-device').textContent=e.device?('Bağlı · '+e.device):'Bağlı değil';
+  try{curDocs=await req('/employees/'+e.tc+'/docs');}catch(x){curDocs=[];}
+  renderDocs();
+  switchPane('kisisel');
+  openDrawer();
+}
+function renderDocs(){
+  var box=document.getElementById('docs');
+  if(!curDocs.length){box.innerHTML='<div style="color:var(--muted);font-size:12px;padding:4px 0">Henüz belge yok. Aşağıdan ekleyebilirsin.</div>';return;}
+  box.innerHTML=curDocs.map(function(d){return '<div class="doc"><span>📄 '+d.name+'</span><button class="del" data-id="'+d.id+'">×</button></div>';}).join('');
+  box.querySelectorAll('.del').forEach(function(b){b.addEventListener('click',async function(){
+    if(!curEdit){curDocs=curDocs.filter(function(x){return x.id!=b.dataset.id;});renderDocs();return;}
+    try{await req('/employees/'+curEdit.tc+'/docs/'+b.dataset.id,{method:'DELETE'});curDocs=await req('/employees/'+curEdit.tc+'/docs');renderDocs();toast('Belge silindi');}catch(e){toast(e.message);}
+  });});
+}
+async function addDoc(){
+  var name=document.getElementById('doc-name').value.trim();
+  if(!name)return;
+  if(!curEdit){curDocs.push({id:'tmp_'+Date.now(),name:name});document.getElementById('doc-name').value='';renderDocs();return;}
+  try{await req('/employees/'+curEdit.tc+'/docs',{method:'POST',body:{name:name}});curDocs=await req('/employees/'+curEdit.tc+'/docs');document.getElementById('doc-name').value='';renderDocs();toast('Belge eklendi');}catch(e){toast(e.message);}
+}
+function switchPane(name){
+  document.querySelectorAll('.dtab').forEach(function(t){t.classList.toggle('active',t.dataset.p===name);});
+  document.querySelectorAll('.pane').forEach(function(p){p.classList.toggle('active',p.id==='p-'+name);});
+}
+function openDrawer(){document.getElementById('ov').classList.add('on');document.getElementById('drawer').classList.add('on');}
+function closeDrawer(){document.getElementById('ov').classList.remove('on');document.getElementById('drawer').classList.remove('on');document.getElementById('bdrawer').classList.remove('on');}
+async function saveSicil(){
+  var ad=(document.getElementById('f-ad').value||'').trim();
+  var soy=(document.getElementById('f-soyad').value||'').trim();
+  var fullAd=(ad+' '+soy).trim();
+  var tc=(document.getElementById('f-tc').value||'').trim();
+  var dob=(document.getElementById('f-dogum').value||'').trim();
+  var dep=document.getElementById('f-bolum').value;
+  var gorev=document.getElementById('f-gorev').value;
+  if(!fullAd)return toast('Ad Soyad gerekli');
+  if(!/^[0-9]{11}$/.test(tc))return toast('TC 11 haneli olmalı');
+  if(!/^[0-9]{2}\.[0-9]{2}\.[0-9]{4}$/.test(dob))return toast('Doğum tarihi gg.aa.yyyy olmalı');
+  try{
+    if(curEdit){
+      await req('/employees/'+curEdit.tc,{method:'PUT',body:{ad:fullAd,dep:dep,gorev:gorev}});
+      toast('Güncellendi');
+    } else {
+      var r=await req('/employees',{method:'POST',body:{ad:fullAd,tc:tc,dob:dob,dep:dep,gorev:gorev}});
+      toast('Eklendi · Sicil '+r.sicil);
+      for(var i=0;i<curDocs.length;i++){if(String(curDocs[i].id).indexOf('tmp_')===0){try{await req('/employees/'+tc+'/docs',{method:'POST',body:{name:curDocs[i].name}});}catch(x){}}}
+    }
+    closeDrawer(); loadEmployees();
+  }catch(e){toast('Hata: '+e.message);}
+}
+async function quitEmp(){
+  if(!curEdit)return;
+  if(!confirm(curEdit.ad+' işten çıkarılsın mı?'))return;
+  try{await req('/employees/'+curEdit.tc+'/status',{method:'POST',body:{status:'pasif'}});toast('İşten çıkarıldı');closeDrawer();loadEmployees();}catch(e){toast(e.message);}
+}
+async function resetDevice(){
+  if(!curEdit)return;
+  if(!confirm('Cihaz eşleşmesi silinsin mi?'))return;
+  try{await req('/employees/'+curEdit.tc+'/reset-device',{method:'POST',body:{}});toast('Cihaz sıfırlandı');loadEmployees();}catch(e){toast(e.message);}
+}
+function openBulk(){document.getElementById('bulk-text').value='';document.getElementById('ov').classList.add('on');document.getElementById('bdrawer').classList.add('on');}
+async function saveBulk(){
+  var txt=document.getElementById('bulk-text').value.trim();
+  if(!txt)return toast('Liste boş');
+  var lines=txt.split('\n').filter(function(l){return l.trim();});
+  var rows=lines.map(function(l){
+    var p=l.split(';').map(function(x){return x.trim();});
+    return {ad:p[0]||'',tc:p[1]||'',dob:p[2]||'',dep:p[3]||'Servis',gorev:p[4]||'Personel'};
   });
-  // işten çıkar
-  document.getElementById('d-quit').addEventListener('click',function(){document.querySelectorAll('.dtab').forEach(function(x){x.classList.remove('active');});document.querySelectorAll('.dtab')[2].classList.add('active');document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('active');});document.getElementById('p-cihaz').classList.add('active');document.getElementById('quitbox').classList.add('on');document.getElementById('quitbox').scrollIntoView({behavior:'smooth'});});
-  document.getElementById('quit-cancel').addEventListener('click',function(){document.getElementById('quitbox').classList.remove('on');});
-  document.getElementById('quit-confirm').addEventListener('click',function(){if(editIdx<0)return;var d=data[editIdx];var t=document.getElementById('f-cikis').value;if(!t){showToast('Çıkış tarihi gir');return;}d[8]='cikan';d[9]=0;d[10]='—';render();closeDrawer();showToast(d[1]+' '+d[2]+' · pasife alındı (çıkış '+t.split('-').reverse().join('.')+'). Kayıt ve geçmiş korunuyor, cihaz erişimi kapatıldı.');});
+  try{
+    var r=await req('/employees/bulk',{method:'POST',body:{rows:rows}});
+    toast(r.added+' kişi eklendi'+(r.errors&&r.errors.length?' · '+r.errors.length+' hata':''));
+    closeDrawer(); loadEmployees();
+  }catch(e){toast(e.message);}
+}
+document.getElementById('t-new').addEventListener('click',openNew);
+document.getElementById('t-bulk').addEventListener('click',openBulk);
+document.getElementById('q').addEventListener('input',render);
+document.querySelectorAll('.stab').forEach(function(s){s.addEventListener('click',function(){document.querySelectorAll('.stab').forEach(function(x){x.classList.remove('active');});s.classList.add('active');curStatus=s.dataset.s;render();});});
+document.getElementById('d-x').addEventListener('click',closeDrawer);
+document.getElementById('d-cancel').addEventListener('click',closeDrawer);
+document.getElementById('ov').addEventListener('click',closeDrawer);
+document.getElementById('d-save').addEventListener('click',saveSicil);
+document.getElementById('d-quit').addEventListener('click',quitEmp);
+document.getElementById('d-reset').addEventListener('click',resetDevice);
+document.getElementById('doc-add-btn').addEventListener('click',addDoc);
+document.querySelectorAll('.dtab').forEach(function(t){t.addEventListener('click',function(){switchPane(t.dataset.p);});});
+document.getElementById('bd-x').addEventListener('click',closeDrawer);
+document.getElementById('bd-cancel').addEventListener('click',closeDrawer);
+document.getElementById('bd-save').addEventListener('click',saveBulk);
+loadSettings().then(loadEmployees);
 </script>
-
 </template>
 <template id="tpl-roller">
 <meta charset="utf-8">
