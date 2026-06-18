@@ -99,8 +99,8 @@
 <div class="auth center on" id="s-splash">
   <div class="hero-logo">G</div><h1>Geçit'e hoş geldin</h1>
   <p class="sub">Resort personel devam uygulaması. Girişini kendi telefonundan, kapı QR koduyla yaparsın.</p>
-  <button class="btn" onclick="show('register')">Kayıt ol</button>
-  <button class="btn ghost" onclick="show('login')" style="margin-top:11px">Zaten hesabım var</button>
+  <button class="btn" onclick="show('login')">Giriş yap</button>
+  <div class="sub" style="font-size:11.5px;margin-top:18px">Hesap yoksa İK departmanı oluşturur</div>
   <div class="sub" style="margin-top:18px;font-size:12px">Doğrulama QR + cihaz eşleştirmesiyle; biyometrik veri tutulmaz (KVKK).</div>
 </div>
 <div class="auth" id="s-register">
@@ -129,7 +129,7 @@
   <div class="field"><label>Şifre</label><input class="pin" id="lg-p" type="password" placeholder="••••••"></div>
   <div class="err" id="lg-err"></div>
   <button class="btn" onclick="doLogin()">Giriş yap</button>
-  <button class="link" onclick="show('forgot')">Şifremi unuttum</button><button class="link mut" onclick="show('splash')">← Geri</button>
+  <button class="link mut" onclick="show('splash')">← Geri</button>
 </div>
 <div class="auth" id="s-forgot">
   <h1>Şifremi unuttum</h1><p class="sub">TC ve doğum tarihin eşleşirse yeni şifre belirlersin.</p>
@@ -273,8 +273,10 @@ async function doSetPass(){var p1=val('sp-p1'),p2=val('sp-p2'),e=document.getEle
   }catch(err){e.textContent=err.message;}}
 function watchApproval(){if(pendTimer)clearInterval(pendTimer);pendTimer=setInterval(checkApproval,2500);checkApproval();}
 async function checkApproval(){try{var me=await api('/personnel/me',{auth:true});if(me.approved){if(pendTimer)clearInterval(pendTimer);meInfo=me;toast('İK onayladı ✓');enterApp();}}catch(e){}}
-async function doLogin(){var tc=val('lg-tc'),p=val('lg-p'),e=document.getElementById('lg-err');
-  try{var lg=await api('/personnel/login',{method:'POST',body:{tc:tc,pass:p}});token=lg.token;try{localStorage.setItem(TOKKEY,token);}catch(x){}meInfo=lg;e.textContent='';
+async function doLogin(){var tc=val('lg-tc'),dob=val('lg-p'),e=document.getElementById('lg-err');
+  if(!/^\d{11}$/.test(tc)){e.textContent='TC 11 haneli olmalı.';return;}
+  if(!/^\d{2}\.\d{2}\.\d{4}$/.test(dob)){e.textContent='Doğum tarihi gg.aa.yyyy biçiminde olmalı.';return;}
+  try{var lg=await api('/personnel/login-dob',{method:'POST',body:{tc:tc,dob:dob}});token=lg.token;try{localStorage.setItem(TOKKEY,token);}catch(x){}meInfo=lg;e.textContent='';
     if(lg.approved)enterApp();else show('pending');}catch(err){e.textContent=err.message;}}
 async function doForgot(){var tc=val('fg-tc'),dob=val('fg-dob'),np=val('fg-p'),e=document.getElementById('fg-err');
   if(np.length<4){e.textContent='Yeni şifre en az 4 hane olmalı.';return;}

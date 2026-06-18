@@ -39,6 +39,13 @@ CREATE TABLE IF NOT EXISTS puantaj_lock (
 CREATE TABLE IF NOT EXISTS hotel_users (
   username TEXT PRIMARY KEY, tenant_id TEXT, pass_hash TEXT, name TEXT
 );
+CREATE TABLE IF NOT EXISTS tenant_settings (
+  tenant_id TEXT PRIMARY KEY, settings TEXT
+);
+CREATE TABLE IF NOT EXISTS employee_docs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, tenant_id TEXT, tc TEXT, name TEXT, note TEXT, ts INTEGER
+);
+
 `);
 
 function seed() {

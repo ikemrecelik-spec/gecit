@@ -127,6 +127,16 @@ app.post('/api/:tenant/personnel/register', (req, res) => {
   res.json({ ok: true, status: 'pending' });
 });
 
+
+// Mobil — TC + Doğum tarihiyle giriş (şifre yerine)
+app.post('/api/:tenant/personnel/login-dob', (req, res) => {
+  const { tenant } = req.params; const { tc, dob } = req.body || {};
+  const a = D.getAccount(tenant, tc);
+  if (!a) return res.status(401).json({ error: 'Bu TC ile kayıt bulunamadı. İK ile iletişime geçin.' });
+  if (a.dob !== dob) return res.status(401).json({ error: 'Doğum tarihi eşleşmiyor' });
+  res.json({ token: issue({ role: 'personnel', tenant, tc, name: a.ad }), approved: !!a.approved, ad: a.ad, sicil: a.sicil, dep: a.dep, gorev: a.gorev });
+});
+
 app.post('/api/:tenant/personnel/login', (req, res) => {
   const { tenant } = req.params; const { tc, pass } = req.body || {};
   const a = D.getAccount(tenant, tc);
@@ -286,6 +296,61 @@ app.post('/api/:tenant/reset', authTenant, (req, res) => {
   ['registrations','employees','attendance','leaves'].forEach(x=>broadcast(t,x));
   res.json({ok:true});
 });
+
+
+// ============ ROLLER ============
+app.get('/api/:tenant/roles', authTenant, (req, res) => {
+  const rows = D.db.prepare("SELECT tc, ad, dep, gorev, COALESCE(rol,'Personel') as rol FROM accounts WHERE tenant_id=? AND approved=1 AND status='aktif' ORDER BY ad").all(req.params.tenant);
+  res.json(rows);
+});
+app.put('/api/:tenant/roles/:tc', authTenant, (req, res) => {
+  const { rol } = req.body || {};
+  D.db.prepare('UPDATE accounts SET rol=? WHERE tenant_id=? AND tc=?').run(rol||'Personel', req.params.tenant, req.params.tc);
+  broadcast(req.params.tenant, 'roles'); res.json({ok:true});
+});
+
+// ============ AYARLAR (departman/görev/vardiya) ============
+app.get('/api/:tenant/settings', authTenant, (req, res) => {
+  const row = D.db.prepare('SELECT settings FROM tenant_settings WHERE tenant_id=?').get(req.params.tenant);
+  res.json(row ? JSON.parse(row.settings) : {departments:[],positions:[],shifts:[]});
+});
+app.put('/api/:tenant/settings', authTenant, (req, res) => {
+  const data = JSON.stringify(req.body||{});
+  D.db.prepare('INSERT INTO tenant_settings (tenant_id, settings) VALUES (?,?) ON CONFLICT(tenant_id) DO UPDATE SET settings=excluded.settings').run(req.params.tenant, data);
+  broadcast(req.params.tenant, 'settings'); res.json({ok:true});
+});
+
+// ============ BELGELER ============
+app.get('/api/:tenant/employees/:tc/docs', authTenant, (req, res) => {
+  const rows = D.db.prepare('SELECT * FROM employee_docs WHERE tenant_id=? AND tc=? ORDER BY id DESC').all(req.params.tenant, req.params.tc);
+  res.json(rows);
+});
+app.post('/api/:tenant/employees/:tc/docs', authTenant, (req, res) => {
+  const { name, note } = req.body || {};
+  if (!name) return res.status(400).json({error:'belge adı gerekli'});
+  D.db.prepare('INSERT INTO employee_docs (tenant_id, tc, name, note, ts) VALUES (?,?,?,?,?)').run(req.params.tenant, req.params.tc, name, note||'', Date.now());
+  res.json({ok:true});
+});
+app.delete('/api/:tenant/employees/:tc/docs/:id', authTenant, (req, res) => {
+  D.db.prepare('DELETE FROM employee_docs WHERE id=? AND tenant_id=? AND tc=?').run(+req.params.id, req.params.tenant, req.params.tc);
+  res.json({ok:true});
+});
+
+// ============ TOPLU SİCİL ============
+app.post('/api/:tenant/employees/bulk', authTenant, (req, res) => {
+  const { rows } = req.body || {};
+  if (!Array.isArray(rows)) return res.status(400).json({error:'rows array gerekli'});
+  let added=0, errors=[];
+  rows.forEach((e,i) => {
+    if (!e.ad || !/^\d{11}$/.test(e.tc||'')) { errors.push({i, msg:'Ad veya TC hatalı'}); return; }
+    if (D.getAccount(req.params.tenant, e.tc)) { errors.push({i, msg:'TC zaten kayıtlı'}); return; }
+    try { D.createEmployeeDirect(req.params.tenant, e); added++; }
+    catch(err) { errors.push({i, msg:err.message}); }
+  });
+  broadcast(req.params.tenant, 'employees');
+  res.json({ok:true, added, errors});
+});
+
 
 app.get('/health', (req, res) => res.json({ ok: true, ts: Date.now() }));
 
