@@ -1,0 +1,394 @@
+<template id="tpl-ayarlar">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ayarlar</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0E1A24;--panel:#14242F;--panel-2:#1B313E;--line:#23414F;--amber:#F2B53B;--mint:#34D9A0;--danger:#FF6B6B;--blue:#6FB1FF;--purple:#C792EA;--text:#EAF2F5;--muted:#8FA6B0}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{background:radial-gradient(1200px 700px at 80% -10%,#16303d,var(--ink) 55%);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:16px 14px 90px}
+h1{font-family:'Space Grotesk';font-size:17px;margin:0 0 14px}
+.layout{display:grid;grid-template-columns:210px 1fr;gap:14px;align-items:start}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+.rail{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;position:sticky;top:10px}
+.rl{display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:9px;cursor:pointer;font-size:13px;color:var(--muted);font-weight:500;transition:.15s}
+.rl:hover{background:var(--panel-2);color:var(--text)}
+.rl.on{background:var(--amber);color:#1a1205;font-weight:700}
+.sec{display:none;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+.sec.on{display:block;animation:fadein .25s}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.sec h2{font-family:'Space Grotesk';font-size:15px;margin:0 0 4px}
+.sec .desc{color:var(--muted);font-size:12px;margin:0 0 16px;line-height:1.55}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:800px){.grid2,.grid3{grid-template-columns:1fr}}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.field input,.field select,.field textarea{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;color:var(--text);font-family:inherit;font-size:13px;outline:none}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--amber)}
+.field textarea{min-height:150px;resize:vertical;line-height:1.6}
+.field .hint{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}
+.mono{font-family:'JetBrains Mono'}
+.btn{padding:8px 14px;border-radius:9px;border:0;font-weight:600;font-size:12.5px;cursor:pointer;font-family:inherit;transition:.15s}
+.btn-amber{background:var(--amber);color:#1a1205}
+.btn-ghost{background:var(--panel-2);border:1px solid var(--line);color:var(--text)}
+.btn-ghost:hover{border-color:var(--amber);color:var(--amber)}
+.btn-danger{background:transparent;border:1px solid rgba(255,107,107,.4);color:var(--danger)}
+.btn-mini{padding:5px 10px;font-size:11.5px;border-radius:7px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.chip{display:inline-flex;align-items:center;gap:7px;background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:6px 8px 6px 14px;font-size:12.5px;font-weight:500}
+.chip .x{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--muted);font-size:13px;line-height:1}
+.chip .x:hover{background:rgba(255,107,107,.2);color:var(--danger)}
+.addrow{display:flex;gap:8px}
+.addrow input{flex:1;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;color:var(--text);font-family:inherit;font-size:13px;outline:none}
+.addrow input:focus{border-color:var(--amber)}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:12px}
+thead th{text-align:left;font-size:10.5px;color:var(--muted);font-weight:600;padding:8px;border-bottom:1px solid var(--line);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+tbody td{padding:6px 8px;border-bottom:1px solid rgba(35,65,79,.35);vertical-align:middle}
+tbody input,tbody select{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:7px;padding:6px 9px;color:var(--text);font-family:inherit;font-size:12.5px;outline:none}
+tbody input:focus{border-color:var(--amber)}
+tbody input[type=time]{font-family:'JetBrains Mono'}
+tbody input[type=checkbox]{width:auto;accent-color:var(--amber);transform:scale(1.2)}
+.savebar{position:fixed;left:0;right:0;bottom:0;background:rgba(14,26,36,.92);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:50}
+.savebar .st{font-size:12px;color:var(--muted)}
+.savebar .st.dirty{color:var(--amber);font-weight:600}
+.savebar .btn{padding:11px 26px;font-size:13.5px}
+.toast{position:fixed;left:50%;bottom:76px;transform:translateX(-50%) translateY(20px);background:var(--panel-2);border:1px solid var(--line);color:var(--text);padding:11px 18px;border-radius:10px;font-size:12.5px;font-weight:600;opacity:0;transition:.3s;z-index:90;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.geo-live{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-top:6px}
+.geo-dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.geo-dot.ok{background:var(--mint);box-shadow:0 0 8px var(--mint)}
+.tag-info{display:inline-block;background:rgba(111,177,255,.13);color:var(--blue);border-radius:6px;padding:2px 9px;font-size:11px;font-weight:600;margin-left:8px}
+</style>
+
+<h1>Ayarlar <span class="tag-info" id="ay-tenant-name"></span></h1>
+<div class="layout">
+  <div class="rail">
+    <div class="rl on" data-s="genel">🏢 Genel</div>
+    <div class="rl" data-s="konum">📍 Konum &amp; Geofence</div>
+    <div class="rl" data-s="dep">🏬 Departmanlar</div>
+    <div class="rl" data-s="poz">💼 Görevler</div>
+    <div class="rl" data-s="vardiya">⏱ Vardiyalar</div>
+    <div class="rl" data-s="izin">✈ İzin Türleri</div>
+    <div class="rl" data-s="tatil">📅 Resmi Tatiller</div>
+    <div class="rl" data-s="kural">⚖ Kurallar</div>
+    <div class="rl" data-s="kvkk">🔒 KVKK</div>
+    <div class="rl" data-s="sistem">⚙ Sistem</div>
+  </div>
+  <div>
+    <!-- GENEL -->
+    <div class="sec on" id="sec-genel">
+      <h2>Genel bilgiler</h2>
+      <p class="desc">İşletmenin temel kimlik bilgileri ve çalışma düzeni.</p>
+      <div class="grid2">
+        <div class="field"><label>İşletme adı</label><input id="g-name" placeholder="Otel / işletme adı"></div>
+        <div class="field"><label>Adres</label><input id="g-adres" placeholder="Açık adres"></div>
+      </div>
+      <div class="grid3">
+        <div class="field"><label>Tam gün mesai süresi (saat)</label><input id="g-tamgun" type="number" step="0.5" min="1" max="24" placeholder="7.5"><div class="hint">Bu süreden az çalışan gün "erken çıkış" sayılır. Saatlik izinle tamamlanabilir.</div></div>
+        <div class="field"><label>Haftalık tatil günü sayısı</label><input id="g-htgun" type="number" min="0" max="3" placeholder="1"></div>
+        <div class="field"><label>Telefon</label><input id="g-tel" placeholder="+90 ..."></div>
+      </div>
+    </div>
+
+    <!-- KONUM -->
+    <div class="sec" id="sec-konum">
+      <h2>Konum &amp; Geofence</h2>
+      <p class="desc">Tesisin merkez koordinatı ve izin verilen yarıçap. Personel bu alanın dışında QR okutursa <b>Konum Uyarısı</b> düşer. Mobil uygulama bu ayarları otomatik kullanır.</p>
+      <div class="grid3">
+        <div class="field"><label>Enlem (lat)</label><input id="g-lat" class="mono" placeholder="36.-----"></div>
+        <div class="field"><label>Boylam (lng)</label><input id="g-lng" class="mono" placeholder="31.-----"></div>
+        <div class="field"><label>Yarıçap (metre)</label><input id="g-radius" type="number" min="50" max="5000" placeholder="200"></div>
+      </div>
+      <button class="btn btn-ghost" id="btn-konum-al">📍 Şu anki konumumu al</button>
+      <div class="geo-live"><span class="geo-dot" id="geo-dot"></span><span id="geo-txt">Konum henüz alınmadı</span></div>
+    </div>
+
+    <!-- DEPARTMANLAR -->
+    <div class="sec" id="sec-dep">
+      <h2>Departmanlar</h2>
+      <p class="desc">Personelin bağlı olduğu bölümler. Filtrelerde, raporlarda ve yetkilendirmede kullanılır.</p>
+      <div class="chips" id="dep-chips"></div>
+      <div class="addrow"><input id="dep-new" placeholder="Yeni departman adı"><button class="btn btn-amber" id="dep-add">Ekle</button></div>
+    </div>
+
+    <!-- GOREVLER -->
+    <div class="sec" id="sec-poz">
+      <h2>Görevler (Pozisyonlar)</h2>
+      <p class="desc">Personel kartlarında seçilebilen görev/unvan listesi.</p>
+      <div class="chips" id="poz-chips"></div>
+      <div class="addrow"><input id="poz-new" placeholder="Yeni görev adı"><button class="btn btn-amber" id="poz-add">Ekle</button></div>
+    </div>
+
+    <!-- VARDIYALAR -->
+    <div class="sec" id="sec-vardiya">
+      <h2>Vardiyalar</h2>
+      <p class="desc">Vardiya tanımları tüm sistemle entegredir: shift planı, geç giriş tespiti ve tolerans hesapları buradan beslenir.</p>
+      <table>
+        <thead><tr><th style="width:70px">Kod</th><th>Ad</th><th style="width:105px">Başlangıç</th><th style="width:105px">Bitiş</th><th style="width:120px">Geç tolerans (dk)</th><th style="width:46px"></th></tr></thead>
+        <tbody id="vard-body"></tbody>
+      </table>
+      <button class="btn btn-ghost" id="vard-add">+ Vardiya ekle</button>
+    </div>
+
+    <!-- IZIN TURLERI -->
+    <div class="sec" id="sec-izin">
+      <h2>İzin türleri</h2>
+      <p class="desc">Shift planında ve izin taleplerinde kullanılan izin kodları. <b>Kod</b> puantajda görünür (örn. Y = yıllık izin).</p>
+      <table>
+        <thead><tr><th style="width:80px">Kod</th><th>Ad</th><th style="width:90px">Ücretli</th><th style="width:46px"></th></tr></thead>
+        <tbody id="izin-body"></tbody>
+      </table>
+      <button class="btn btn-ghost" id="izin-add">+ İzin türü ekle</button>
+    </div>
+
+    <!-- TATILLER -->
+    <div class="sec" id="sec-tatil">
+      <h2>Resmi tatiller</h2>
+      <p class="desc">Resmi tatil günleri puantajda otomatik işaretlenir; o gün çalışanlar için tatil mesaisi kuralları uygulanabilir.</p>
+      <table>
+        <thead><tr><th style="width:160px">Tarih</th><th>Ad</th><th style="width:46px"></th></tr></thead>
+        <tbody id="tatil-body"></tbody>
+      </table>
+      <button class="btn btn-ghost" id="tatil-add">+ Tatil ekle</button>
+    </div>
+
+    <!-- KURALLAR -->
+    <div class="sec" id="sec-kural">
+      <h2>Çalışma kuralları</h2>
+      <p class="desc">Fazla mesai, mola ve hafta tatili davranışları.</p>
+      <div class="grid2">
+        <div class="field"><label>Fazla mesai onayı</label>
+          <select id="k-fmonay"><option value="1">Onay zorunlu (önerilen)</option><option value="0">Otomatik say</option></select>
+          <div class="hint">Onay zorunluysa FM, yönetici onaylamadan puantaja işlenmez.</div>
+        </div>
+        <div class="field"><label>Gece çalışması takibi</label>
+          <select id="k-gece"><option value="1">Açık (20:00–06:00 arası izlenir)</option><option value="0">Kapalı</option></select>
+          <div class="hint">4857 sayılı İş Kanunu gece çalışma sınırlarının takibi.</div>
+        </div>
+        <div class="field"><label>Varsayılan yemek molası (dk)</label><input id="k-yemek" type="number" min="0" max="120" placeholder="60"></div>
+        <div class="field"><label>Varsayılan dinlenme molası (dk)</label><input id="k-mola" type="number" min="0" max="60" placeholder="15"></div>
+      </div>
+    </div>
+
+    <!-- KVKK -->
+    <div class="sec" id="sec-kvkk">
+      <h2>KVKK aydınlatma metni</h2>
+      <p class="desc">Mobil uygulamada ve kayıt süreçlerinde personele gösterilen kişisel verilerin korunması metni.</p>
+      <div class="field"><textarea id="kvkk-metin" placeholder="Aydınlatma metnini buraya yazın..."></textarea></div>
+    </div>
+
+    <!-- SISTEM -->
+    <div class="sec" id="sec-sistem">
+      <h2>Sistem</h2>
+      <p class="desc">Teknik bilgiler ve bakım işlemleri.</p>
+      <div class="field"><label>Aktif işletme (tenant)</label><input id="sys-tenant" disabled class="mono"></div>
+      <div class="field"><label>Ayarların son kayıt hali</label><div class="hint" id="sys-json" style="font-family:'JetBrains Mono';font-size:10.5px;background:var(--panel-2);border-radius:8px;padding:10px;max-height:180px;overflow:auto;white-space:pre"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="savebar">
+  <span class="st" id="save-st">Değişiklik yok</span>
+  <button class="btn btn-amber" id="btn-save">💾 Tümünü Kaydet</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+function getG(){try{return window.parent&&window.parent.GECIT||null;}catch(e){return null;}}
+var API=(window.__APIBASE||location.origin);
+async function req(path,opts){
+  var g=getG(); var tenant=(g&&g._tenant)||'1'; var tok=(g&&g._token)||null;
+  opts=opts||{}; var h={'Content-Type':'application/json'};
+  if(tok)h['Authorization']='Bearer '+tok;
+  var r=await fetch(API+'/api/'+tenant+path,{method:opts.method||'GET',headers:h,body:opts.body?JSON.stringify(opts.body):undefined});
+  var d=null;try{d=await r.json();}catch(e){}
+  if(!r.ok)throw new Error((d&&d.error)||('HTTP '+r.status));
+  return d;
+}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+function $(s){return document.querySelector(s);}
+
+var S={};           // tum ayarlar objesi (bilinmeyen anahtarlar korunur)
+var dirty=false;
+function markDirty(){dirty=true;var st=$('#save-st');st.textContent='Kaydedilmemiş değişiklikler var';st.classList.add('dirty');}
+function markClean(){dirty=false;var st=$('#save-st');st.textContent='Değişiklik yok';st.classList.remove('dirty');}
+
+/* ---- rail gecisleri ---- */
+document.querySelectorAll('.rl').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.rl').forEach(function(x){x.classList.remove('on');});
+    document.querySelectorAll('.sec').forEach(function(x){x.classList.remove('on');});
+    b.classList.add('on');
+    document.getElementById('sec-'+b.dataset.s).classList.add('on');
+  });
+});
+
+/* ---- chips (departman / gorev) ---- */
+function renderChips(elId,list,onDel){
+  var el=document.getElementById(elId);
+  el.innerHTML=(list||[]).map(function(x,i){return '<span class="chip">'+x+'<span class="x" data-i="'+i+'">×</span></span>';}).join('')||'<span style="color:var(--muted);font-size:12px">Henüz eklenmemiş</span>';
+  el.querySelectorAll('.x').forEach(function(x){x.addEventListener('click',function(){onDel(+x.dataset.i);});});
+}
+function bindChipSection(chipsId,inputId,btnId,key){
+  function rr(){renderChips(chipsId,S[key],function(i){S[key].splice(i,1);markDirty();rr();});}
+  document.getElementById(btnId).addEventListener('click',function(){
+    var v=document.getElementById(inputId).value.trim();
+    if(!v)return;
+    S[key]=S[key]||[];
+    if(S[key].indexOf(v)>-1){toast('Zaten var');return;}
+    S[key].push(v);document.getElementById(inputId).value='';markDirty();rr();
+  });
+  document.getElementById(inputId).addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById(btnId).click();});
+  return rr;
+}
+var rDep=bindChipSection('dep-chips','dep-new','dep-add','departments');
+var rPoz=bindChipSection('poz-chips','poz-new','poz-add','positions');
+
+/* ---- vardiyalar ---- */
+function renderVard(){
+  var tb=document.getElementById('vard-body');
+  var list=S.shifts=S.shifts||[];
+  tb.innerHTML=list.map(function(v,i){
+    return '<tr>'
+      +'<td><input class="mono" value="'+(v.code||'')+'" data-i="'+i+'" data-k="code" maxlength="6"></td>'
+      +'<td><input value="'+(v.name||'')+'" data-i="'+i+'" data-k="name"></td>'
+      +'<td><input type="time" value="'+(v.start||'')+'" data-i="'+i+'" data-k="start"></td>'
+      +'<td><input type="time" value="'+(v.end||'')+'" data-i="'+i+'" data-k="end"></td>'
+      +'<td><input type="number" min="0" max="120" value="'+(v.tol!=null?v.tol:15)+'" data-i="'+i+'" data-k="tol"></td>'
+      +'<td><button class="btn btn-danger btn-mini" data-del="'+i+'">✕</button></td>'
+      +'</tr>';
+  }).join('')||'<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:18px">Vardiya tanımlanmamış</td></tr>';
+  tb.querySelectorAll('input').forEach(function(inp){
+    inp.addEventListener('input',function(){
+      var i=+inp.dataset.i,k=inp.dataset.k;
+      S.shifts[i][k]=(k==='tol')?(+inp.value||0):inp.value;
+      markDirty();
+    });
+  });
+  tb.querySelectorAll('[data-del]').forEach(function(b){b.addEventListener('click',function(){S.shifts.splice(+b.dataset.del,1);markDirty();renderVard();});});
+}
+document.getElementById('vard-add').addEventListener('click',function(){
+  S.shifts=S.shifts||[];S.shifts.push({code:'',name:'',start:'08:00',end:'16:00',tol:15});markDirty();renderVard();
+});
+
+/* ---- izin turleri ---- */
+function normLeave(x){
+  if(typeof x==='string')return {code:x,name:x,ucretli:true};
+  return {code:x.code||'',name:x.name||'',ucretli:x.ucretli!==false};
+}
+function renderIzin(){
+  var tb=document.getElementById('izin-body');
+  S.leaves=(S.leaves||[]).map(normLeave);
+  tb.innerHTML=S.leaves.map(function(v,i){
+    return '<tr>'
+      +'<td><input class="mono" value="'+(v.code||'')+'" data-i="'+i+'" data-k="code" maxlength="4"></td>'
+      +'<td><input value="'+(v.name||'')+'" data-i="'+i+'" data-k="name"></td>'
+      +'<td style="text-align:center"><input type="checkbox" '+(v.ucretli?'checked':'')+' data-i="'+i+'" data-k="ucretli"></td>'
+      +'<td><button class="btn btn-danger btn-mini" data-del="'+i+'">✕</button></td>'
+      +'</tr>';
+  }).join('')||'<tr><td colspan="4" style="color:var(--muted);text-align:center;padding:18px">İzin türü tanımlanmamış</td></tr>';
+  tb.querySelectorAll('input').forEach(function(inp){
+    inp.addEventListener('input',function(){
+      var i=+inp.dataset.i,k=inp.dataset.k;
+      S.leaves[i][k]=(k==='ucretli')?inp.checked:inp.value;
+      markDirty();
+    });
+  });
+  tb.querySelectorAll('[data-del]').forEach(function(b){b.addEventListener('click',function(){S.leaves.splice(+b.dataset.del,1);markDirty();renderIzin();});});
+}
+document.getElementById('izin-add').addEventListener('click',function(){
+  S.leaves=S.leaves||[];S.leaves.push({code:'',name:'',ucretli:true});markDirty();renderIzin();
+});
+
+/* ---- tatiller ---- */
+function normHoliday(x){
+  if(typeof x==='string')return {date:x,name:''};
+  return {date:x.date||'',name:x.name||''};
+}
+function renderTatil(){
+  var tb=document.getElementById('tatil-body');
+  S.holidays=(S.holidays||[]).map(normHoliday);
+  tb.innerHTML=S.holidays.map(function(v,i){
+    return '<tr>'
+      +'<td><input type="date" class="mono" value="'+(v.date||'')+'" data-i="'+i+'" data-k="date"></td>'
+      +'<td><input value="'+(v.name||'')+'" data-i="'+i+'" data-k="name" placeholder="örn. Yılbaşı"></td>'
+      +'<td><button class="btn btn-danger btn-mini" data-del="'+i+'">✕</button></td>'
+      +'</tr>';
+  }).join('')||'<tr><td colspan="3" style="color:var(--muted);text-align:center;padding:18px">Tatil eklenmemiş</td></tr>';
+  tb.querySelectorAll('input').forEach(function(inp){
+    inp.addEventListener('input',function(){S.holidays[+inp.dataset.i][inp.dataset.k]=inp.value;markDirty();});
+  });
+  tb.querySelectorAll('[data-del]').forEach(function(b){b.addEventListener('click',function(){S.holidays.splice(+b.dataset.del,1);markDirty();renderTatil();});});
+}
+document.getElementById('tatil-add').addEventListener('click',function(){
+  S.holidays=S.holidays||[];S.holidays.push({date:'',name:''});markDirty();renderTatil();
+});
+
+/* ---- basit alan baglayici ---- */
+function bindField(id,get,set){
+  var el=document.getElementById(id);
+  el.value=get()!=null?get():'';
+  el.addEventListener('input',function(){set(el.value);markDirty();});
+}
+
+/* ---- konumumu al ---- */
+document.getElementById('btn-konum-al').addEventListener('click',function(){
+  var dot=document.getElementById('geo-dot'),txt=document.getElementById('geo-txt');
+  if(!navigator.geolocation){txt.textContent='Tarayıcı konum desteklemiyor';return;}
+  txt.textContent='Konum alınıyor...';
+  navigator.geolocation.getCurrentPosition(function(pos){
+    document.getElementById('g-lat').value=pos.coords.latitude.toFixed(6);
+    document.getElementById('g-lng').value=pos.coords.longitude.toFixed(6);
+    S.general=S.general||{};
+    S.general.lat=+pos.coords.latitude.toFixed(6);
+    S.general.lng=+pos.coords.longitude.toFixed(6);
+    dot.classList.add('ok');txt.textContent='Konum alındı ±'+Math.round(pos.coords.accuracy)+'m hassasiyet';
+    markDirty();
+  },function(){txt.textContent='Konum alınamadı (izin verilmedi?)';});
+});
+
+/* ---- yukle ---- */
+async function load(){
+  try{ S=await req('/settings')||{}; }catch(e){ S={}; toast('Ayarlar yüklenemedi: '+e.message); }
+  S.general=S.general||{}; S.rules=S.rules||{}; S.kvkk=S.kvkk||{}; S.system=S.system||{};
+  var g=getG();
+  document.getElementById('ay-tenant-name').textContent=(S.general.name||(g&&g._tenant)||'');
+  document.getElementById('sys-tenant').value=(g&&g._tenant)||'?';
+  document.getElementById('sys-json').textContent=JSON.stringify(S,null,2).slice(0,4000);
+
+  bindField('g-name',function(){return S.general.name;},function(v){S.general.name=v;});
+  bindField('g-adres',function(){return S.general.adres;},function(v){S.general.adres=v;});
+  bindField('g-tel',function(){return S.general.tel;},function(v){S.general.tel=v;});
+  bindField('g-tamgun',function(){return S.general.tamGunDk!=null?(S.general.tamGunDk/60):7.5;},function(v){S.general.tamGunDk=Math.round((parseFloat(v)||7.5)*60);});
+  bindField('g-htgun',function(){return S.general.htGun!=null?S.general.htGun:1;},function(v){S.general.htGun=+v||0;});
+  bindField('g-lat',function(){return S.general.lat;},function(v){S.general.lat=parseFloat(v)||null;});
+  bindField('g-lng',function(){return S.general.lng;},function(v){S.general.lng=parseFloat(v)||null;});
+  bindField('g-radius',function(){return S.general.radius!=null?S.general.radius:200;},function(v){S.general.radius=+v||200;});
+  bindField('k-fmonay',function(){return S.rules.fmOnay!==false?'1':'0';},function(v){S.rules.fmOnay=(v==='1');});
+  bindField('k-gece',function(){return S.rules.gece!==false?'1':'0';},function(v){S.rules.gece=(v==='1');});
+  bindField('k-yemek',function(){return S.rules.yemekDk!=null?S.rules.yemekDk:60;},function(v){S.rules.yemekDk=+v||0;});
+  bindField('k-mola',function(){return S.rules.molaDk!=null?S.rules.molaDk:15;},function(v){S.rules.molaDk=+v||0;});
+  bindField('kvkk-metin',function(){return S.kvkk.metin;},function(v){S.kvkk.metin=v;});
+
+  if(S.general.lat&&S.general.lng){document.getElementById('geo-dot').classList.add('ok');document.getElementById('geo-txt').textContent='Kayıtlı konum mevcut';}
+
+  rDep(); rPoz(); renderVard(); renderIzin(); renderTatil();
+  markClean();
+}
+
+/* ---- kaydet ---- */
+document.getElementById('btn-save').addEventListener('click',async function(){
+  var b=this; b.disabled=true; b.textContent='Kaydediliyor...';
+  try{
+    await req('/settings',{method:'PUT',body:S});
+    toast('✓ Tüm ayarlar kaydedildi');
+    markClean();
+    document.getElementById('sys-json').textContent=JSON.stringify(S,null,2).slice(0,4000);
+    document.getElementById('ay-tenant-name').textContent=S.general.name||'';
+  }catch(e){ toast('Kaydetme hatası: '+e.message); }
+  b.disabled=false; b.textContent='💾 Tümünü Kaydet';
+});
+
+load();
+</script>
+</template>
